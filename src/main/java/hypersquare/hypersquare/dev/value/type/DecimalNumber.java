@@ -75,13 +75,12 @@ public class DecimalNumber {
         return (double) value / SCALE;
     }
 
-   @Override
+    @Override
     public String toString() {
-        long wholePart = this.value / SCALE;
-        long decimalPart = this.value % SCALE;
-
-        String str = String.format("%d.%06d", wholePart, decimalPart);
-
+        long wholePart = Math.abs(this.value / SCALE);
+        long decimalPart = Math.abs(this.value % SCALE);
+        String str = value < 0 ? "-" : "";
+        str += String.format("%d.%06d", wholePart, decimalPart);
         while (str.endsWith("0")) str = str.substring(0, str.length() - 1);
         if (str.endsWith(".")) str = str.substring(0, str.length() - 1);
         return str;
