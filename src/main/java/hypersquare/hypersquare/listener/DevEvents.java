@@ -17,6 +17,7 @@ import hypersquare.hypersquare.dev.target.Target;
 import hypersquare.hypersquare.dev.target.TargetType;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.dev.value.impl.*;
+import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.event.Event;
 import hypersquare.hypersquare.menu.ActionTargetsMenu;
 import hypersquare.hypersquare.menu.CodeblockMenu;
@@ -27,13 +28,14 @@ import hypersquare.hypersquare.plot.ChangeGameMode;
 import hypersquare.hypersquare.plot.MoveEntities;
 import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
+import hypersquare.hypersquare.util.ValueDisplay;
+import hypersquare.hypersquare.util.color.Colors;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,6 +44,7 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -113,13 +116,17 @@ public class DevEvents implements Listener {
     @EventHandler
     public void onInteract(@NotNull PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
-        if (clickedBlock == null) return;
+        if (clickedBlock == null){
+            setLocation(event.getPlayer(), event.getPlayer().getLocation());
+            return;
+        }
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK -> {
                 if (event.getHand() != EquipmentSlot.HAND || clickedBlock.getLocation().getX() > -0) return;
                 Material clickedMaterial = clickedBlock.getType();
                 if (clickedMaterial == Material.AIR) return;
-                if (clickedMaterial == Material.OAK_WALL_SIGN || CodeBlocks.getByMaterial(clickedMaterial) != null) handleCodeblockRClick(clickedBlock, event);
+                if (clickedMaterial == Material.OAK_WALL_SIGN || CodeBlocks.getByMaterial(clickedMaterial) != null)
+                    handleCodeblockRClick(clickedBlock, event);
                 else if (clickedBlock.getType() == Material.BARREL) handleBarrelRClick(clickedBlock, event);
             }
             case RIGHT_CLICK_AIR -> {
@@ -130,6 +137,34 @@ public class DevEvents implements Listener {
                 CodeValues v = CodeValues.getType(varItem);
                 if (v == null) return;
                 v.onRightClick(event.getPlayer(), v.fromJson(varItem));
+            }
+            case LEFT_CLICK_BLOCK -> {
+                Player player = event.getPlayer();
+                if (Hypersquare.mode.get(player).equals("building")) {
+                    if (player.getInventory().getItemInMainHand().getItemMeta() != null) {
+                        if (CodeValues.LOCATION.fromItem(player.getInventory().getItemInMainHand()) != null) {
+                            event.setCancelled(true);
+                            setLocation(event.getPlayer(), event.getClickedBlock().getLocation().add(0.5, 0.5, 0.5));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void setLocation(Player player, Location newLocation){
+        if (Hypersquare.mode.get(player).equals("building")) {
+            if (player.getInventory().getItemInMainHand().getItemMeta() != null) {
+                if (CodeValues.LOCATION.fromItem(player.getInventory().getItemInMainHand()) != null) {
+                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
+                    Location oldLocation = (Location) CodeValues.LOCATION.realValue(CodeValues.LOCATION.fromItem(player.getInventory().getItemInMainHand()));
+                    oldLocation.setWorld(newLocation.getWorld());
+                    ValueDisplay.removeValueDisplay(oldLocation);
+                    LocationValue.HSLocation locationValue = new LocationValue.HSLocation(new DecimalNumber(newLocation.getX()), new DecimalNumber(newLocation.getY()), new DecimalNumber(newLocation.getZ()), new DecimalNumber(0), new DecimalNumber(0));
+                    ValueDisplay.spawnValueDisplay(newLocation,10, NamedTextColor.GREEN);
+                    ItemStack item = CodeValues.LOCATION.getItem(locationValue);
+                    player.getInventory().setItemInMainHand(item);
+                }
             }
         }
     }
@@ -233,7 +268,7 @@ public class DevEvents implements Listener {
                 inv.setItem(1, new TextValue().emptyValue());
                 inv.setItem(2, new NumberValue().emptyValue());
                 inv.setItem(3, new VariableValue().emptyValue());
-                inv.setItem(4,new LocationValue().emptyValue());
+                inv.setItem(4, new LocationValue().emptyValue());
 
                 inv.setItem(9, new NullValue().emptyValue());
 
@@ -312,7 +347,7 @@ public class DevEvents implements Listener {
 
     @EventHandler
     public void creatureSpawnEvent(@NotNull CreatureSpawnEvent event) {
-        if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND) event.setCancelled(true);
+        if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM && event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND) event.setCancelled(true);
     }
 
     @EventHandler
@@ -359,7 +394,7 @@ public class DevEvents implements Listener {
 
             // Swapping hands twice in 1 second
             if (System.currentTimeMillis() - Hypersquare.lastSwapHands.get(player) < 950
-                    && System.currentTimeMillis() - Hypersquare.cooldownMap.get(player.getUniqueId()) > 1000) {
+                && System.currentTimeMillis() - Hypersquare.cooldownMap.get(player.getUniqueId()) > 1000) {
                 int plotID = PlotUtilities.getPlotId(player);
                 if (playerMode.equals("coding")) {
                     Hypersquare.lastDevLocation.put(player, player.getLocation());
