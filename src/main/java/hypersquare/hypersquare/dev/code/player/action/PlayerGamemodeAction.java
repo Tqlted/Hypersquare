@@ -35,7 +35,7 @@ public class PlayerGamemodeAction implements Action {
     @Override
     public BarrelTag[] tags() {
         return new BarrelTag[]{
-            new BarrelTag("gamemode", "Gamemode to Set to", GameMode.CREATIVE,
+            new BarrelTag("gamemode", "Gamemode", GameMode.CREATIVE,
                 new BarrelTag.Option(GameMode.CREATIVE, "Creative", Material.COMMAND_BLOCK),
                 new BarrelTag.Option(GameMode.SURVIVAL, "Survival", Material.OAK_LOG),
                 new BarrelTag.Option(GameMode.ADVENTURE, "Adventure", Material.GRASS_BLOCK),
@@ -72,7 +72,7 @@ public class PlayerGamemodeAction implements Action {
     public ItemStack item() {
         return new ActionItem()
                 .setMaterial(Material.GRASS_BLOCK)
-                .setName(Component.text("Set Gamemode").color(Colors.LIME))
+                .setName(Component.text(this.getName()).color(Colors.LIME))
                 .setDescription(Component.text("Sets the gamemode of the player."))
                 .setParameters(parameters())
                 .build();

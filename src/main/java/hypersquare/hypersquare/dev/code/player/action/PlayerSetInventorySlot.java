@@ -11,69 +11,61 @@ import hypersquare.hypersquare.item.action.player.PlayerActionItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.error.CodeErrorType;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerGiveItemsAction implements Action {
+public class PlayerSetInventorySlot implements Action {
 
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
-        List<ItemStack> items = new ArrayList<>();
-        double multiplier = ctx.args().getOr("multiplier", new DecimalNumber(1, 0)).toDouble();
-        for (ItemStack item : ctx.args().<ItemStack>allNonNull("items")) {
-            int amount = (int) (item.getAmount() * multiplier);
-            int max = item.getMaxStackSize();
-            item.setAmount(max);
-            while (amount > max && items.size() < 100) {
-                items.add(item.clone());
-                amount -= max;
-            }
-            item.setAmount(amount);
-            items.add(item);
-        }
-        
-        for (Player p : targetSel.players()) {
-            for (ItemStack item : items) {
-                p.getInventory().addItem(item);
-            }
+        ItemStack item = ctx.args().single("item");
+        int slot = ctx.args().<DecimalNumber>single("slot").toInt()-1;
+
+        for (Player plr : targetSel.players()) {
+            if (slot > plr.getInventory().getSize())
+                throw new HSException(CodeErrorType.INDEX_OUT_OF_BOUNDS, new Exception());
+
+            plr.getInventory().setItem(slot, item);
         }
     }
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.CHEST)
-                .setName(Component.text(this.getName()).color(NamedTextColor.GREEN))
-                .setDescription(Component.text("Gives the player all of the"),
-                        Component.text("items in the barrel"))
+                .setMaterial(Material.ITEM_FRAME)
+                .setName(Component.text(this.getName()).color(NamedTextColor.GOLD))
+                .setDescription(Component.text("Set the item in a slot of the player."))
                 .setParameters(parameters())
-                .addAdditionalInfo(Component.text("This is the first action"),
-                        Component.text("we added!"))
-                .setEnchanted(true)
+                .addAdditionalInfo(Component.text("Slots 1-9 are hotbar slots."),
+                    MiniMessage.miniMessage().deserialize("<blue>⏵ </blue><gray>Slots 10-36 are inventory slots."),
+                    MiniMessage.miniMessage().deserialize("<blue>⏵ </blue><gray>Slots 37-40 are armor slots, boots to helmet."),
+                    MiniMessage.miniMessage().deserialize("<blue>⏵ </blue><gray>Slot 40 is the offhand slot."))
                 .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 4, data)
-                .parameter("items", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)
-                .parameter("multiplier", 35);
+        return new BarrelMenu(this, 3, data)
+            .parameter("item", 12)
+            .parameter("slot", 14);
     }
 
     @Override
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.ITEM, true, false, Component.text("Item(s) to give"), "items"),
+                DisplayValue.ITEM, false, false, Component.text("Item to set"), "item"),
             new BarrelParameter(
-                DisplayValue.NUMBER, false, true, Component.text("Amount to multiply by"), "multiplier"),
+                DisplayValue.NUMBER, false, false, Component.text("Item slot"), "slot")
         };
     }
 
@@ -83,7 +75,7 @@ public class PlayerGiveItemsAction implements Action {
     }
 
     public String getId() {
-        return "give_items";
+        return "set_inv_slot";
     }
 
     @Override
@@ -92,12 +84,12 @@ public class PlayerGiveItemsAction implements Action {
     }
 
     public String getSignName() {
-        return "GiveItems";
+        return "SetInvSlot";
     }
 
     @Override
     public String getName() {
-        return "Give Items";
+        return "Set Inventory Slot";
     }
 
     @Override

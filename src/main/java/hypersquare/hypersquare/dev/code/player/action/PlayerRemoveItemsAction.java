@@ -49,8 +49,8 @@ public class PlayerRemoveItemsAction implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.LAVA_BUCKET)
-                .setName(Component.text("Remove Items").color(NamedTextColor.RED))
+                .setMaterial(Material.FLINT_AND_STEEL)
+                .setName(Component.text(this.getName()).color(NamedTextColor.RED))
                 .setDescription(Component.text("Removes given amount of item"),
                         Component.text("in the barrel from the player"))
                 .setParameters(parameters())
