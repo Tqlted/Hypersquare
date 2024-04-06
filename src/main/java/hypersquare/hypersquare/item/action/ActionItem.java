@@ -99,7 +99,7 @@ public class ActionItem {
         // Arguments
         // Type - Description(s)*
         lore.add(Component.empty());
-        lore.add(Component.text("Barrel Parameters:")
+        lore.add(Component.text(params.length > 0 ? "Barrel Parameters:" : "No Parameters")
                 .color(NamedTextColor.WHITE)
                 .decoration(TextDecoration.ITALIC, false));
         boolean hasOptional = false;
