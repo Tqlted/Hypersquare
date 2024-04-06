@@ -73,8 +73,7 @@ public class PlayerGamemodeAction implements Action {
         return new ActionItem()
                 .setMaterial(Material.GRASS_BLOCK)
                 .setName(Component.text("Set Gamemode").color(Colors.LIME))
-                .setDescription(Component.text("Sets a player's game"),
-                                Component.text("mode."))
+                .setDescription(Component.text("Sets the gamemode of the player."))
                 .setParameters(parameters())
                 .build();
     }

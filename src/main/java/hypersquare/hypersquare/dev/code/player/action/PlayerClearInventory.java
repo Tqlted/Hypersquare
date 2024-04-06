@@ -35,8 +35,7 @@ public class PlayerClearInventory implements Action {
         return new ActionItem()
                 .setMaterial(Material.CAULDRON)
                 .setName(Component.text(this.getName()).color(NamedTextColor.RED))
-                .setDescription(Component.text("Clears the inventory of"),
-                        Component.text("the player."))
+                .setDescription(Component.text("Clears the inventory of the player."))
                 .setParameters(parameters())
                 .build();
     }
