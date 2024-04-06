@@ -64,6 +64,17 @@ public class BarrelMenu extends Menu {
         return this;
     }
 
+    public BarrelMenu parameterRange(String id, int startSlot, int endSlot) {
+        int slotId = 0;
+        for (int slot = startSlot; slot <= endSlot; slot++) {
+            BarrelParameter param = paramSupplier.getParameter(id);
+            if (param == null) continue;
+            this.slot(slot, new MenuParameter(param, slotId, argsData));
+            slotId++;
+        }
+        return this;
+    }
+
     public BarrelMenu tag(String id, int slot) {
         this.slot(slot, new MenuTag(tagSupplier.getTag(id), tagsData));
         return this;

@@ -4,9 +4,7 @@ import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.action.EmptyAction;
 import hypersquare.hypersquare.dev.code.control.WaitAction;
 import hypersquare.hypersquare.dev.code.dev.PrintStackTraceAction;
-import hypersquare.hypersquare.dev.code.player.action.PlayerCreativeModeAction;
-import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;
-import hypersquare.hypersquare.dev.code.player.action.PlayerSendMessageAction;
+import hypersquare.hypersquare.dev.code.player.action.*;
 import hypersquare.hypersquare.dev.code.player.condition.IfPlayerHolding;
 import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.code.var.repeat.RepeatMultiple;
@@ -26,8 +24,10 @@ public enum Actions implements Action {
     PRINT_STACKTRACE(new PrintStackTraceAction()),
 
     PLAYER_GIVE_ITEMS(new PlayerGiveItemsAction()),
+    PLAYER_REMOVE_ITEMS(new PlayerRemoveItemsAction()),
+    PLAYER_CLEAR_INV(new PlayerClearInventory()),
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
-    PLAYER_CREATIVE_MODE(new PlayerCreativeModeAction()),
+    PLAYER_GAMEMODE(new PlayerGamemodeAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
 
     ASSIGN_VARIABLE(new AssignVariableAction()),

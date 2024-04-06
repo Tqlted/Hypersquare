@@ -18,12 +18,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerCreativeModeAction implements Action {
+public class PlayerGamemodeAction implements Action {
 
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            p.setGameMode(GameMode.CREATIVE);
+            p.setGameMode(ctx.getTag("gamemode", GameMode::valueOf));
         }
     }
 
@@ -34,12 +34,19 @@ public class PlayerCreativeModeAction implements Action {
 
     @Override
     public BarrelTag[] tags() {
-        return new BarrelTag[]{};
+        return new BarrelTag[]{
+            new BarrelTag("gamemode", "Gamemode to Set to", GameMode.CREATIVE,
+                new BarrelTag.Option(GameMode.CREATIVE, "Creative", Material.COMMAND_BLOCK),
+                new BarrelTag.Option(GameMode.SURVIVAL, "Survival", Material.OAK_LOG),
+                new BarrelTag.Option(GameMode.ADVENTURE, "Adventure", Material.GRASS_BLOCK),
+                new BarrelTag.Option(GameMode.SPECTATOR, "Spectator", Material.GLASS)
+                )
+        };
     }
 
     @Override
     public String getId() {
-        return "creative_mode";
+        return "gamemode";
     }
     @Override
     public String getCodeblockId() {
@@ -48,12 +55,12 @@ public class PlayerCreativeModeAction implements Action {
 
     @Override
     public String getSignName() {
-        return "CreativeMode";
+        return "Gamemode";
     }
 
     @Override
     public String getName() {
-        return "Set to Creative Mode";
+        return "Set Gamemode";
     }
 
     @Override
@@ -65,15 +72,16 @@ public class PlayerCreativeModeAction implements Action {
     public ItemStack item() {
         return new ActionItem()
                 .setMaterial(Material.GRASS_BLOCK)
-                .setName(Component.text("Set to Creative Mode").color(Colors.LIME))
+                .setName(Component.text("Set Gamemode").color(Colors.LIME))
                 .setDescription(Component.text("Sets a player's game"),
-                                Component.text("mode to Creative."))
+                                Component.text("mode."))
                 .setParameters(parameters())
                 .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 3, data);
+        return new BarrelMenu(this, 3, data)
+            .tag("gamemode", 26);
     }
 }
