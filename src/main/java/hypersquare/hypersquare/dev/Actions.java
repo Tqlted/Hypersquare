@@ -26,7 +26,7 @@ public enum Actions implements Action {
     PLAYER_GIVE_ITEMS(new PlayerGiveItemsAction()),
     PLAYER_SET_HOTBAR_ITEMS(new PlayerSetHotbarItems()),
     PLAYER_SET_INVENTORY_ITEMS(new PlayerSetInventoryItems()),
-    PLAYER_SET_INVENTORY_SLOT(new PlayerSetInventorySlot()), // For player inventories! Not inventory menus.
+    PLAYER_SET_INVENTORY_SLOT(new PlayerSetInventorySlot()),
     PLAYER_REMOVE_ITEMS(new PlayerRemoveItemsAction()),
     PLAYER_CLEAR_INV(new PlayerClearInventory()),
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
