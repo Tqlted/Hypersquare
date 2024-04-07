@@ -33,9 +33,9 @@ public class PlayerSetInventoryItems implements Action {
 
         for (Player p : targetSel.players()) {
             for (int i = 9; i < 36; i++) {
-                if (items.size()+9 <= i) break;
+                if (items.size() + 9 <= i) break;
 
-                ItemStack item = items.get(i-9);
+                ItemStack item = items.get(i - 9);
                 boolean notNull = item != null;
 
                 switch (ctx.getTag("replacestyle", ReplaceOption::valueOf)) {
@@ -58,11 +58,11 @@ public class PlayerSetInventoryItems implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.ENDER_CHEST)
-                .setName(Component.text(this.getName()).color(NamedTextColor.GOLD))
-                .setDescription(Component.text("Sets the inventory items of the player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.ENDER_CHEST)
+            .setName(Component.text(this.getName()).color(NamedTextColor.GOLD))
+            .setDescription(Component.text("Sets the inventory items of the player."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override
@@ -84,8 +84,8 @@ public class PlayerSetInventoryItems implements Action {
     public BarrelTag[] tags() {
         return new BarrelTag[]{
             new BarrelTag("replacestyle", "Replacement", ReplaceOption.ONLY_ITEMS_REPLACE,
-                new BarrelTag.Option(ReplaceOption.REPLACE_EVERYTHING, "Replace Each Slot (Including null)", Material.IRON_BLOCK),
-                new BarrelTag.Option(ReplaceOption.ONLY_ITEMS_REPLACE, "Replace Each Slot (Excluding null)", Material.RAW_IRON_BLOCK),
+                new BarrelTag.Option(ReplaceOption.REPLACE_EVERYTHING, "Replace Each Slot (Including air)", Material.IRON_BLOCK),
+                new BarrelTag.Option(ReplaceOption.ONLY_ITEMS_REPLACE, "Replace Each Slot (Excluding air)", Material.RAW_IRON_BLOCK),
                 new BarrelTag.Option(ReplaceOption.ONLY_REPLACE_AIR, "Replace Empty Slots", Material.IRON_ORE)
             )
         };

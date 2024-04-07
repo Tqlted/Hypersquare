@@ -4,7 +4,6 @@ import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
@@ -14,13 +13,11 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerSetHotbarItems implements Action {
@@ -61,11 +58,11 @@ public class PlayerSetHotbarItems implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.DISPENSER)
-                .setName(Component.text(this.getName()).color(NamedTextColor.GOLD))
-                .setDescription(Component.text("Sets the hotbar items of the player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.DISPENSER)
+            .setName(Component.text(this.getName()).color(NamedTextColor.GOLD))
+            .setDescription(Component.text("Sets the hotbar items of the player."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override
@@ -87,8 +84,8 @@ public class PlayerSetHotbarItems implements Action {
     public BarrelTag[] tags() {
         return new BarrelTag[]{
             new BarrelTag("replacestyle", "Replacement", ReplaceOption.ONLY_ITEMS_REPLACE,
-                new BarrelTag.Option(ReplaceOption.REPLACE_EVERYTHING, "Replace Each Slot (Including null)", Material.IRON_BLOCK),
-                new BarrelTag.Option(ReplaceOption.ONLY_ITEMS_REPLACE, "Replace Each Slot (Excluding null)", Material.RAW_IRON_BLOCK),
+                new BarrelTag.Option(ReplaceOption.REPLACE_EVERYTHING, "Replace Each Slot (Including air)", Material.IRON_BLOCK),
+                new BarrelTag.Option(ReplaceOption.ONLY_ITEMS_REPLACE, "Replace Each Slot (Excluding air)", Material.RAW_IRON_BLOCK),
                 new BarrelTag.Option(ReplaceOption.ONLY_REPLACE_AIR, "Replace Empty Slots", Material.IRON_ORE)
             )
         };

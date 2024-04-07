@@ -22,14 +22,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class PlayerSetInventorySlot implements Action {
 
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         ItemStack item = ctx.args().single("item");
-        int slot = ctx.args().<DecimalNumber>single("slot").toInt()-1;
+        int slot = ctx.args().<DecimalNumber>single("slot").toInt() - 1;
 
         for (Player plr : targetSel.players()) {
             if (slot > plr.getInventory().getSize())
@@ -41,15 +39,15 @@ public class PlayerSetInventorySlot implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.ITEM_FRAME)
-                .setName(Component.text(this.getName()).color(NamedTextColor.GOLD))
-                .setDescription(Component.text("Set the item in a slot of the player."))
-                .setParameters(parameters())
-                .addAdditionalInfo(Component.text("Slots 1-9 are hotbar slots."),
-                    MiniMessage.miniMessage().deserialize("<blue>⏵ </blue><gray>Slots 10-36 are inventory slots."),
-                    MiniMessage.miniMessage().deserialize("<blue>⏵ </blue><gray>Slots 37-40 are armor slots, boots to helmet."),
-                    MiniMessage.miniMessage().deserialize("<blue>⏵ </blue><gray>Slot 40 is the offhand slot."))
-                .build();
+            .setMaterial(Material.ITEM_FRAME)
+            .setName(Component.text(this.getName()).color(NamedTextColor.GOLD))
+            .setDescription(Component.text("Set the item in a slot of the player."))
+            .setParameters(parameters())
+            .addAdditionalInfo(Component.text("Slots 1-9 are hotbar slots."))
+            .addAdditionalInfo(Component.text("Slots 10-36 are inventory slots."))
+            .addAdditionalInfo(Component.text("Slots 37-40 are armor slots, boots to helmet."))
+            .addAdditionalInfo(Component.text("Slot 40 is the offhand slot."))
+            .build();
     }
 
     @Override
