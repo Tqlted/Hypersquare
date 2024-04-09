@@ -29,11 +29,8 @@ import hypersquare.hypersquare.plot.MoveEntities;
 import hypersquare.hypersquare.util.PlotUtilities;
 import hypersquare.hypersquare.util.Utilities;
 import hypersquare.hypersquare.util.ValueDisplay;
-import hypersquare.hypersquare.util.color.Colors;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -44,14 +41,15 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -117,6 +115,7 @@ public class DevEvents implements Listener {
     public void onInteract(@NotNull PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
         if (clickedBlock == null){
+            ValueDisplay.showLocationDisplay(event.getPlayer(), event.getPlayer().getLocation());
             setLocation(event.getPlayer(), event.getPlayer().getLocation());
             return;
         }
@@ -144,7 +143,8 @@ public class DevEvents implements Listener {
                     if (player.getInventory().getItemInMainHand().getItemMeta() != null) {
                         if (CodeValues.LOCATION.fromItem(player.getInventory().getItemInMainHand()) != null) {
                             event.setCancelled(true);
-                            setLocation(event.getPlayer(), event.getClickedBlock().getLocation().add(0.5, 0.5, 0.5));
+                            ValueDisplay.showLocationDisplay(event.getPlayer(), event.getClickedBlock().getLocation().add(0.5, 0.5, 0.5));
+                            setLocation(player,event.getClickedBlock().getLocation().add(0.5, 0.5, 0.5));
                         }
                     }
                 }
@@ -152,16 +152,41 @@ public class DevEvents implements Listener {
         }
     }
 
+
+
+    @EventHandler
+    public void onChangeSlot(PlayerItemHeldEvent event){
+        Player player = event.getPlayer();
+        if (Hypersquare.mode.get(player).equals("building")) {
+            if (Hypersquare.locationValueDisplays.containsKey(event.getPlayer())) {
+                ValueDisplay.removeValueDisplay(Hypersquare.locationValueDisplays.get(event.getPlayer()));
+                Hypersquare.locationValueDisplays.remove(event.getPlayer());
+            }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    ItemStack newItem = player.getInventory().getItemInMainHand();
+                    if (newItem != null) {
+                        if (newItem.hasItemMeta()) {
+                            if (CodeValues.LOCATION.fromItem(newItem) != null) {
+                                Location location = (Location) CodeValues.LOCATION.realValue(CodeValues.LOCATION.fromItem(newItem));
+                                location.setWorld(player.getWorld());
+                                ValueDisplay.showLocationDisplay(event.getPlayer(), location);
+                            }
+                        }
+                    }
+                }
+
+            }.runTaskLater(Hypersquare.instance, 3);
+
+        }
+    }
     private static void setLocation(Player player, Location newLocation){
         if (Hypersquare.mode.get(player).equals("building")) {
             if (player.getInventory().getItemInMainHand().getItemMeta() != null) {
                 if (CodeValues.LOCATION.fromItem(player.getInventory().getItemInMainHand()) != null) {
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
-                    Location oldLocation = (Location) CodeValues.LOCATION.realValue(CodeValues.LOCATION.fromItem(player.getInventory().getItemInMainHand()));
-                    oldLocation.setWorld(newLocation.getWorld());
-                    ValueDisplay.removeValueDisplay(oldLocation);
-                    LocationValue.HSLocation locationValue = new LocationValue.HSLocation(new DecimalNumber(newLocation.getX()), new DecimalNumber(newLocation.getY()), new DecimalNumber(newLocation.getZ()), new DecimalNumber(0), new DecimalNumber(0));
-                    ValueDisplay.spawnValueDisplay(newLocation,10, NamedTextColor.GREEN);
+                    LocationValue.HSLocation locationValue = new LocationValue.HSLocation(new DecimalNumber(newLocation.getX()), new DecimalNumber(newLocation.getY()), new DecimalNumber(newLocation.getZ()), new DecimalNumber(newLocation.getPitch()), new DecimalNumber(newLocation.getYaw()));
                     ItemStack item = CodeValues.LOCATION.getItem(locationValue);
                     player.getInventory().setItemInMainHand(item);
                 }
