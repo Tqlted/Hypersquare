@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.value.CodeValues;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,6 +77,7 @@ public class ActionArguments {
         }
         T ret = (T) target.realValue(target.fromJson(o));
         if (ret instanceof CodeVariable v) v.bind(ctx);
+        if (ret instanceof Location location) location.setWorld(Bukkit.getWorld("hs." + ctx.executor().plotId));
         return ret;
     }
 }

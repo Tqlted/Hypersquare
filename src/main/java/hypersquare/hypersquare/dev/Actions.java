@@ -7,6 +7,7 @@ import hypersquare.hypersquare.dev.code.dev.PrintStackTraceAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerCreativeModeAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerGiveItemsAction;
 import hypersquare.hypersquare.dev.code.player.action.PlayerSendMessageAction;
+import hypersquare.hypersquare.dev.code.player.action.PlayerTeleportAction;
 import hypersquare.hypersquare.dev.code.player.condition.IfPlayerHolding;
 import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.code.var.repeat.RepeatMultiple;
@@ -27,6 +28,7 @@ public enum Actions implements Action {
 
     PLAYER_GIVE_ITEMS(new PlayerGiveItemsAction()),
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
+    PLAYER_TELEPORT(new PlayerTeleportAction()),
     PLAYER_CREATIVE_MODE(new PlayerCreativeModeAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
 
