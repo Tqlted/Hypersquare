@@ -22,7 +22,7 @@ public enum DisplayValue {
     ANY(null, Colors.GOLD_LIGHT, (_, _) -> true),
     VARIABLE(CodeValues.VARIABLE, Colors.YELLOW, (v, _) -> v == CodeValues.VARIABLE),
     TEXT(CodeValues.TEXT, Colors.LIME_DARK, (v, _) -> v == CodeValues.TEXT),
-    LOCATION(null, Colors.GREEN, (_, _) -> false),
+    LOCATION(CodeValues.LOCATION, Colors.GREEN, (v, _) -> v == CodeValues.LOCATION),
     LIST(null, Colors.GREEN_DARK_2, (_, _) -> false),
     VECTOR(null, Colors.TEAL, (_, _) -> false),
     STRING(null, Colors.AQUA_LIGHT, (v, _) -> v == CodeValues.STRING),
@@ -48,6 +48,7 @@ public enum DisplayValue {
         put(DisplayValue.SOUND, Material.BLUE_STAINED_GLASS_PANE);
         put(DisplayValue.PARTICLE, Material.PURPLE_STAINED_GLASS_PANE);
         put(DisplayValue.POTION, Material.MAGENTA_STAINED_GLASS_PANE);
+        put(DisplayValue.LOCATION, Material.LIME_STAINED_GLASS_PANE);
     }};
 
     public final CodeValues codeVal;

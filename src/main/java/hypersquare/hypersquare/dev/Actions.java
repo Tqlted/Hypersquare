@@ -31,6 +31,7 @@ public enum Actions implements Action {
     PLAYER_CLEAR_INV(new PlayerClearInventory()),
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
     PLAYER_GAMEMODE(new PlayerGamemodeAction()),
+    PLAYER_TELEPORT(new PlayerTeleportAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
 
     ASSIGN_VARIABLE(new AssignVariableAction()),
