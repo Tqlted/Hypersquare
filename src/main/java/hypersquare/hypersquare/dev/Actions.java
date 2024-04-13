@@ -30,6 +30,8 @@ public enum Actions implements Action {
     PLAYER_SET_FLYING(new PlayerSetFlyingAction()),
     PLAYER_SET_GLIDING(new PlayerSetGlidingAction()),
     PLAYER_BOOST_ELYTRA(new PlayerBoostElytraAction()),
+    PLAYER_SET_ROTATION(new PlayerSetRotationAction()),
+    PLAYER_FACE_LOCATION(new PlayerFaceLocationAction()),
     PLAYER_CREATIVE_MODE(new PlayerCreativeModeAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
 
