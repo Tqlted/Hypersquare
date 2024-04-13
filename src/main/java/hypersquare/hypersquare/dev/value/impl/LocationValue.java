@@ -13,6 +13,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -146,7 +147,7 @@ public class LocationValue implements CodeValue<LocationValue.HSLocation, Locati
 
     @Override
     public Location realValue(HSLocation value) {
-        return new Location(null, value.x.toLong(), value.y.toLong(), value.z.toLong(), value.pitch.toFloat(), value.yaw.toFloat());
+        return new Location(null, value.x.toDouble(), value.y.toDouble(), value.z.toDouble(), value.pitch.toFloat(), value.yaw.toFloat());
     }
 
     @Override
