@@ -17,7 +17,7 @@ public class MyPlotsMenu {
 
     public static void open(Player player) {
         List<Document> playerPlots = PlotDatabase.getPlotsByOwner(player.getUniqueId().toString());
-        int size = (int) Math.ceil((double) playerPlots.size() / 8);
+        int size = (int) Math.ceil((double) playerPlots.size() / 8) + 1;
         Menu menu = new Menu(Component.text("My Plots"), size);
 
         menu.slot(menu.getSize() - 1, new MenuItem(MiscItems.CLAIM_PLOT.build()).onClick(() -> CreatePlotsMenu.open(player)));
