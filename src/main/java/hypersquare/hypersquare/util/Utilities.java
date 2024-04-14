@@ -236,13 +236,14 @@ public class Utilities {
         player.setFreezeTicks(0);
         player.setFoodLevel(20);
         if (clearInventory) player.getInventory().clear();
-        player.getActivePotionEffects().clear();
+        player.clearActivePotionEffects();
         player.setSaturation(20);
         player.closeInventory();
         player.setAllowFlight(false);
         player.setFlying(false);
         player.setFlySpeed(0.1f);
         player.setWalkSpeed(0.2f);
+        player.setFallDistance(0);
         player.setGameMode(GameMode.SURVIVAL);
     }
 
