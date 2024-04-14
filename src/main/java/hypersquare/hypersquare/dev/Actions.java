@@ -13,6 +13,7 @@ import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +25,13 @@ public enum Actions implements Action {
     PRINT_STACKTRACE(new PrintStackTraceAction()),
 
     PLAYER_GIVE_ITEMS(new PlayerGiveItemsAction()),
+    PLAYER_SET_HOTBAR_ITEMS(new PlayerSetHotbarItems()),
+    PLAYER_SET_INVENTORY_ITEMS(new PlayerSetInventoryItems()),
+    PLAYER_SET_INVENTORY_SLOT(new PlayerSetInventorySlot()),
+    PLAYER_REMOVE_ITEMS(new PlayerRemoveItemsAction()),
+    PLAYER_CLEAR_INV(new PlayerClearInventory()),
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
+    PLAYER_GAMEMODE(new PlayerGamemodeAction()),
     PLAYER_TELEPORT(new PlayerTeleportAction()),
     PLAYER_LAUNCH(new PlayerLaunchAction()),
     PLAYER_SET_FLYING(new PlayerSetFlyingAction()),
@@ -32,8 +39,11 @@ public enum Actions implements Action {
     PLAYER_BOOST_ELYTRA(new PlayerBoostElytraAction()),
     PLAYER_SET_ROTATION(new PlayerSetRotationAction()),
     PLAYER_FACE_LOCATION(new PlayerFaceLocationAction()),
-    PLAYER_CREATIVE_MODE(new PlayerCreativeModeAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
+
+    // Player Statistics
+    SET_PLAYER_HEALTH(PlayerStatEnum.SET_PLAYER_HEALTH.getInstance()),
+
 
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),

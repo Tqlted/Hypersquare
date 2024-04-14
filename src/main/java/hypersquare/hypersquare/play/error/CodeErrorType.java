@@ -8,6 +8,7 @@ public enum CodeErrorType {
     INVALID_EVENT("Invalid event", true),                             // Triggered event that doesn't exist
     MISSING_PARAM("Missing parameter", true),                         // Required parameter not specified
     INVALID_PARAM("Invalid parameter", true),                         // Valid type but invalid input
+    INDEX_OUT_OF_BOUNDS("Invalid parameter, index out of bounds", true),// Valid type but invalid input, specifically for invalid indices
     CODEBLOCK_THROWN("Error thrown while executing an action", true), // Error while executing the codeblock itself
     INTERNAL_ERROR("Error thrown while executing code", true),        // Error while going through actions and triggering them
     RUN_LIMIT("Reached running threads limit", true),                 // Plot has too many threads running

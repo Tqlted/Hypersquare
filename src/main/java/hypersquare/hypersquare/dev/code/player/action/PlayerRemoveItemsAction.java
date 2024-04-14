@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerGiveItemsAction implements Action {
+public class PlayerRemoveItemsAction implements Action {
 
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
@@ -42,28 +42,25 @@ public class PlayerGiveItemsAction implements Action {
         
         for (Player p : targetSel.players()) {
             for (ItemStack item : items) {
-                p.getInventory().addItem(item);
+                p.getInventory().removeItem(item);
             }
         }
     }
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.CHEST)
-                .setName(Component.text(this.getName()).color(NamedTextColor.GREEN))
-                .setDescription(Component.text("Gives the player all of the"),
-                        Component.text("items in the barrel"))
+                .setMaterial(Material.FLINT_AND_STEEL)
+                .setName(Component.text(this.getName()).color(NamedTextColor.RED))
+                .setDescription(Component.text("Removes given amount of item"),
+                        Component.text("in the barrel from the player"))
                 .setParameters(parameters())
-                .addAdditionalInfo(Component.text("This is the first action"),
-                        Component.text("we added!"))
-                .setEnchanted(true)
                 .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 4, data)
-                .parameter("items", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)
+                .parameterRange("items", 9, 26)
                 .parameter("multiplier", 35);
     }
 
@@ -71,7 +68,7 @@ public class PlayerGiveItemsAction implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.ITEM, true, false, Component.text("Item(s) to give"), "items"),
+                DisplayValue.ITEM, true, false, Component.text("Item(s) to remove"), "items"),
             new BarrelParameter(
                 DisplayValue.NUMBER, false, true, Component.text("Amount to multiply by"), "multiplier"),
         };
@@ -83,7 +80,7 @@ public class PlayerGiveItemsAction implements Action {
     }
 
     public String getId() {
-        return "give_items";
+        return "remove_items";
     }
 
     @Override
@@ -92,12 +89,12 @@ public class PlayerGiveItemsAction implements Action {
     }
 
     public String getSignName() {
-        return "GiveItems";
+        return "RemoveItems";
     }
 
     @Override
     public String getName() {
-        return "Give Items";
+        return "Remove Items";
     }
 
     @Override
