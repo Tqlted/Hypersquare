@@ -97,6 +97,7 @@ public class Plot {
             w.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
             w.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
             w.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+            w.setDifficulty(Difficulty.EASY);
             w.setSpawnLocation(10, 0, 10);
 
             WorldUtilities.cloneWorld("dev_template", "hs.code." + plotID, _ -> {
@@ -196,6 +197,7 @@ public class Plot {
         w.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
         w.setGameRule(GameRule.DO_FIRE_TICK, false);
         w.setGameRule(GameRule.DO_VINES_SPREAD, false);
+        w.setDifficulty(Difficulty.EASY);
     }
 
     public static void deletePlot(int plotID) throws UnknownWorldException, IOException {

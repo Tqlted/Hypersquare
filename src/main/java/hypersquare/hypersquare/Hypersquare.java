@@ -53,6 +53,8 @@ public final class Hypersquare extends JavaPlugin {
     public static final HashMap<UUID, Long> cooldownMap = new HashMap<>();
     // Code execution - Contains each plot's code execution instance
     public static final HashMap<Integer, CodeExecutor> codeExecMap = new HashMap<>();
+    // Displayed locations - Contains current location display per player
+    public static HashMap<Player,UUID> locationValueDisplays = new HashMap<>();
 
     public static final int PLOT_VERSION = 5;
     public static final Random RANDOM = new Random(PLOT_VERSION * 12345L);
