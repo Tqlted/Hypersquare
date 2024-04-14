@@ -1,7 +1,8 @@
 package hypersquare.hypersquare.plot;
 
 import com.infernalsuite.aswm.api.SlimePlugin;
-import com.infernalsuite.aswm.api.exceptions.*;
+import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
 import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
@@ -172,7 +173,9 @@ public class Plot {
                     public void run() {
                         // Configure worlds
                         Location spawn = PlotDatabase.getPlotSpawnLocation(plotID);
-                        Bukkit.getWorld(worldName).setSpawnLocation(spawn);
+                        if (Bukkit.getWorld(worldName) != null) {
+                            Bukkit.getWorld(worldName).setSpawnLocation(spawn);
+                        }
                         loadRules(worldName);
                         loadRules(codeWorldName);
 
