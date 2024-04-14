@@ -92,7 +92,7 @@ public class PlayerSendMessageAction implements Action {
     public ItemStack item() {
         return new ActionItem()
                 .setMaterial(Material.OAK_SIGN)
-                .setName(Component.text("Send Message").color(NamedTextColor.GREEN))
+                .setName(Component.text(this.getName()).color(NamedTextColor.GREEN))
                 .setDescription(Component.text("Sends the player all of the"),
                         Component.text("messages in the barrel"))
                 .setParameters(parameters())

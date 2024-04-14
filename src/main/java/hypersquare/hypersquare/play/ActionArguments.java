@@ -38,9 +38,7 @@ public class ActionArguments {
         BarrelParameter param = ctx.action().getParameter(id);
         if (param == null) throw new NullPointerException("Unknown parameter! " + id);
         for (JsonObject o : values.get(id)) {
-            T v = getAs(o, param.type().codeVal);
-            if (v == null) continue;
-            ret.add(v);
+            ret.add(getAs(o, param.type().codeVal));
         }
         return ret;
     }
