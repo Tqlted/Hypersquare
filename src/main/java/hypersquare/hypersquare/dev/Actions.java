@@ -33,6 +33,12 @@ public enum Actions implements Action {
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
     PLAYER_GAMEMODE(new PlayerGamemodeAction()),
     PLAYER_TELEPORT(new PlayerTeleportAction()),
+    PLAYER_LAUNCH(new PlayerLaunchAction()),
+    PLAYER_SET_FLYING(new PlayerSetFlyingAction()),
+    PLAYER_SET_GLIDING(new PlayerSetGlidingAction()),
+    PLAYER_BOOST_ELYTRA(new PlayerBoostElytraAction()),
+    PLAYER_SET_ROTATION(new PlayerSetRotationAction()),
+    PLAYER_FACE_LOCATION(new PlayerFaceLocationAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
 
     // Player Statistics
