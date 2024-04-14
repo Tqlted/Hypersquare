@@ -16,16 +16,15 @@ import java.util.List;
 public class MyPlotsMenu {
 
     public static void open(Player player) {
-        Menu menu = new Menu(Component.text("My Plots"), 2);
+        List<Document> playerPlots = PlotDatabase.getPlotsByOwner(player.getUniqueId().toString());
+        int size = (int) Math.ceil((double) playerPlots.size() / 8);
+        Menu menu = new Menu(Component.text("My Plots"), size);
 
         menu.slot(menu.getSize() - 1, new MenuItem(MiscItems.CLAIM_PLOT.build()).onClick(() -> CreatePlotsMenu.open(player)));
 
         Utilities.sendOpenMenuSound(player);
 
         int i = 0;
-
-        // Retrieve all plots owned by the player
-        List<Document> playerPlots = PlotDatabase.getPlotsByOwner(player.getUniqueId().toString());
 
         for (Document plotDocument : playerPlots) {
             int plotID = plotDocument.getInteger("plotID");
@@ -34,7 +33,6 @@ public class MyPlotsMenu {
             MenuItem plot = new MenuItem(plotItem);
 
             menu.slot(i, plot);
-
             final MenuItem finalPlot = plot;
             plot.onClick(() -> {
                 ChangeModeMenu.open(player, finalPlot, plotDocument.getInteger("plotID"));
