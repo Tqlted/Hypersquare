@@ -94,7 +94,7 @@ public class ChangeGameMode {
 
             String ownerName;
             try { // Edge case where the owner of the plot is not in the database
-                ownerName = Bukkit.getOfflinePlayer(Objects.requireNonNull(PlotManager.getPlotOwner(plotID))).getName();
+                ownerName = Bukkit.getServer().getOfflinePlayer(UUID.fromString(Objects.requireNonNull(PlotManager.getPlotOwner(plotID)))).getName();
             } catch (NullPointerException e) {
                 ownerName = "Unknown"; // This should never happen!
             }
@@ -105,6 +105,7 @@ public class ChangeGameMode {
             PlotStats.addPlayer(plotID, player);
         });
     }
+
 
     public static void buildMode(@NotNull Player player, int plotID, boolean keepState) {
         if (PlotDatabase.getRawBuilders(plotID).contains(player.getUniqueId().toString()) || player.hasPermission("hypersquare.ignore.builders")) {
@@ -124,7 +125,7 @@ public class ChangeGameMode {
                 PlotManager.loadPlot(plotID);
 
                 if (keepState && Hypersquare.lastBuildLocation.containsKey(player)
-                        && Hypersquare.lastBuildLocation.get(player).getWorld().getName().equals(worldName)) {
+                    && Hypersquare.lastBuildLocation.get(player).getWorld().getName().equals(worldName)) {
                     player.teleport(Hypersquare.lastBuildLocation.get(player));
                 } else {
                     player.teleport(Bukkit.getWorld(worldName).getSpawnLocation());
