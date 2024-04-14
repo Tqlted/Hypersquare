@@ -13,6 +13,7 @@ import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +34,10 @@ public enum Actions implements Action {
     PLAYER_GAMEMODE(new PlayerGamemodeAction()),
     PLAYER_TELEPORT(new PlayerTeleportAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
+
+    // Player Statistics
+    SET_PLAYER_HEALTH(PlayerStatEnum.SET_PLAYER_HEALTH.getInstance()),
+
 
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),
