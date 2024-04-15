@@ -45,7 +45,12 @@ public enum Events implements Event {
     PLAYER_DROP_ITEM_EVENT(new PlayerDropItemEvent()),
     PLAYER_BREAK_ITEM_EVENT(new PlayerBreakItemEvent()),
     PLAYER_DAMAGE_ITEM_EVENT(new PlayerItemDamageEvent()),
-    PLAYER_MEND_ITEM_EVENT(new PlayerMendItemEvent())
+    PLAYER_MEND_ITEM_EVENT(new PlayerMendItemEvent()),
+    PLAYER_RESPAWN_EVENT(new PlayerRespawnEvent()),
+    PLAYER_TAKE_DAMAGE_EVENT(new PlayerTakeDamageEvent()),
+    PLAYER_DAMAGE_PLAYER_EVENT(new PlayerDamagePlayerEvent()),
+    PLAYER_DAMAGE_ENTITY_EVENT(new PlayerDamageEntityEvent()),
+    ENTITY_DAMAGE_PLAYER_EVENT(new EntityDamagePlayerEvent())
 
     ;
 
