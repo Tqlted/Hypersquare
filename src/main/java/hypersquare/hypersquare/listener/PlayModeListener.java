@@ -255,6 +255,14 @@ public class PlayModeListener implements Listener {
         Player p = event.getPlayer();
         if (cannotExecute(p)) return;
         PlotUtilities.getExecutor(p).trigger(Events.PLAYER_MEND_ITEM_EVENT, event, new CodeSelection(p));
+
+    }
+    @EventHandler
+    public void playerRespawnEvent(@NotNull PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        if (cannotExecute(player)) return;
+        CodeExecutor executor = PlotUtilities.getExecutor(player);
+        executor.trigger(Events.PLAYER_RESPAWN_EVENT, event, new CodeSelection(player));
     }
     // TODO: Close Inventory
     // TODO: Fish Event
