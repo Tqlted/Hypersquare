@@ -36,7 +36,7 @@ public class PlayerTakeDamageEvent implements CancellableEvent {
 
     @Override
     public String getSignName() {
-        return "PlayerTakeDmg";
+        return "TakeDamage";
     }
 
     @Override

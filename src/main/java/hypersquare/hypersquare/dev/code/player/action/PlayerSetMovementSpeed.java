@@ -28,12 +28,8 @@ public class PlayerSetMovementSpeed implements Action {
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
             float speed = ctx.args().<DecimalNumber>allNonNull("speed").getFirst().toFloat();
-            float groundSpeed = speed/500;
-            if(groundSpeed<0) groundSpeed = 0;
-            if(groundSpeed>1) groundSpeed = 1;
-            float flightSpeed = speed/1000;
-            if(flightSpeed<0) flightSpeed = 0;
-            if(flightSpeed>1) flightSpeed = 1;
+            float groundSpeed = Math.clamp(speed/500, 0, 1);
+            float flightSpeed = Math.clamp(speed/1000, 0, 1);
 
             PlayerSetMovementSpeed.SpeedTypes speedType = ctx.getTag("speed_type", PlayerSetMovementSpeed. SpeedTypes::valueOf);
                 if(speedType == SpeedTypes.GROUND) p.setWalkSpeed(groundSpeed);
@@ -48,7 +44,7 @@ public class PlayerSetMovementSpeed implements Action {
     @Override
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
-            new BarrelParameter(DisplayValue.NUMBER, false, false, Component.text("Movement speed percentage (0% to 1000%)"), "speed")
+            new BarrelParameter(DisplayValue.NUMBER, false, false, Component.text("Movement speed percentage"), "speed")
         };
     }
 
@@ -95,6 +91,10 @@ public class PlayerSetMovementSpeed implements Action {
             .setName(Component.text("Set Movement Speed").color(NamedTextColor.GOLD))
             .setDescription(Component.text("Sets a player's walking"),
                 Component.text("and/or flight speed."))
+            .addAdditionalInfo(Component.text("Fly speed maxes at 1000%, whilst"),
+                Component.text("walk speed maxes at 500%."))
+            .addAdditionalInfo(Component.text("Values above or below the max"),
+                Component.text("or min will get clamped accordingly."))
             .setParameters(parameters())
             .setTagAmount(tags().length)
             .build();

@@ -5,7 +5,7 @@ import hypersquare.hypersquare.dev.action.EmptyAction;
 import hypersquare.hypersquare.dev.code.control.WaitAction;
 import hypersquare.hypersquare.dev.code.dev.PrintStackTraceAction;
 import hypersquare.hypersquare.dev.code.player.action.*;
-import hypersquare.hypersquare.dev.code.player.condition.IfPlayerHolding;
+import hypersquare.hypersquare.dev.code.player.condition.*;
 import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.code.var.repeat.RepeatMultiple;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
@@ -41,10 +41,19 @@ public enum Actions implements Action {
     PLAYER_SET_ROTATION(new PlayerSetRotationAction()),
     PLAYER_FACE_LOCATION(new PlayerFaceLocationAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
+    IF_PLAYER_NO_ITEM_COOLDOWN(new IfPlayerNoItemCooldown()),
+    IF_PLAYER_GROUNDED(new IfPlayerGrounded()),
+    IF_PLAYER_SNEAKING(new IfPlayerSneaking()),
+    IF_PLAYER_SPRINTING(new IfPlayerSprinting()),
+    IF_PLAYER_FLYING(new IfPlayerFlying()),
+    IF_PLAYER_GLIDING(new IfPlayerGliding()),
 
     // Player Statistics
+    SET_PLAYER_HEALTH(PlayerStatEnum.SET_PLAYER_HEALTH.getInstance()),
     SET_MOVEMENT_SPEED(new PlayerSetMovementSpeed()),
 
+    // Player Appearance
+    SEND_ATTACK_ANIMATION(new PlayerSendAttackAnimation()),
 
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),
