@@ -5,7 +5,7 @@ import hypersquare.hypersquare.dev.action.EmptyAction;
 import hypersquare.hypersquare.dev.code.control.WaitAction;
 import hypersquare.hypersquare.dev.code.dev.PrintStackTraceAction;
 import hypersquare.hypersquare.dev.code.player.action.*;
-import hypersquare.hypersquare.dev.code.player.condition.IfPlayerHolding;
+import hypersquare.hypersquare.dev.code.player.condition.*;
 import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
 import hypersquare.hypersquare.dev.code.var.repeat.RepeatMultiple;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
@@ -13,7 +13,6 @@ import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +29,9 @@ public enum Actions implements Action {
     PLAYER_SET_INVENTORY_SLOT(new PlayerSetInventorySlot()),
     PLAYER_REMOVE_ITEMS(new PlayerRemoveItemsAction()),
     PLAYER_CLEAR_INV(new PlayerClearInventory()),
+    PLAYER_SET_ITEM_COOLDOWN(new PlayerSetItemCooldown()),
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
+    PLAYER_SHOW_ACTION_BAR_TEXT(new PlayerShowActionBarText()),
     PLAYER_GAMEMODE(new PlayerGamemodeAction()),
     PLAYER_TELEPORT(new PlayerTeleportAction()),
     PLAYER_LAUNCH(new PlayerLaunchAction()),
@@ -40,10 +41,22 @@ public enum Actions implements Action {
     PLAYER_SET_ROTATION(new PlayerSetRotationAction()),
     PLAYER_FACE_LOCATION(new PlayerFaceLocationAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
+    IF_PLAYER_ITEM_COOLDOWN(new IfPlayerItemCooldown()),
+    IF_PLAYER_GROUNDED(new IfPlayerGrounded()),
+    IF_PLAYER_SNEAKING(new IfPlayerSneaking()),
+    IF_PLAYER_SPRINTING(new IfPlayerSprinting()),
+    IF_PLAYER_FLYING(new IfPlayerFlying()),
+    IF_PLAYER_GLIDING(new IfPlayerGliding()),
 
     // Player Statistics
     SET_PLAYER_HEALTH(PlayerStatEnum.SET_PLAYER_HEALTH.getInstance()),
+    SET_MOVEMENT_SPEED(new PlayerSetMovementSpeed()),
 
+    // Player Appearance
+    SEND_ATTACK_ANIMATION(new PlayerSendAttackAnimation()),
+
+    // Player Inventory Menus
+    OPEN_BOOK(new PlayerOpenBook()),
 
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),
