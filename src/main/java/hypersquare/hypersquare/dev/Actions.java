@@ -49,7 +49,14 @@ public enum Actions implements Action {
     IF_PLAYER_GLIDING(new IfPlayerGliding()),
 
     // Player Statistics
+    SET_PLAYER_ATTRIBUTE(new PlayerSetAttribute()),
     SET_PLAYER_HEALTH(PlayerStatEnum.SET_PLAYER_HEALTH.getInstance()),
+    SET_INVUL_TICKS(PlayerStatEnum.SET_PLAYER_INVUL_TICKS.getInstance()),
+    SET_FALL_DISTANCE(PlayerStatEnum.SET_PLAYER_FALL_DISTANCE.getInstance()),
+    SET_REMAINING_AIR(PlayerStatEnum.SET_PLAYER_REMAINING_AIR.getInstance()),
+    SET_FREEZE_TICKS(PlayerStatEnum.SET_PLAYER_FREEZE_TICKS.getInstance()),
+    SET_FIRE_TICKS(PlayerStatEnum.SET_PLAYER_FIRE_TICKS.getInstance()),
+    SET_HOTBAR_SLOT(PlayerStatEnum.SET_PLAYER_HOTBAR_SLOT.getInstance()),
     SET_MOVEMENT_SPEED(new PlayerSetMovementSpeed()),
 
     // Player Appearance
