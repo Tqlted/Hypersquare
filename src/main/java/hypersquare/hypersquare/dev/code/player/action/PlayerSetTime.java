@@ -14,31 +14,17 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerOpenBook implements Action {
-
+public class PlayerSetTime implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            ItemStack item = ctx.args().single("item");
-            if(item.getType() != Material.WRITTEN_BOOK) {
-                if(item.getType() == Material.WRITABLE_BOOK) {
-                    BookMeta bookMeta = (BookMeta) item.getItemMeta();
-                    bookMeta.setAuthor(p.getName());
-                    bookMeta.setTitle("Book");
-                    item.setType(Material.WRITTEN_BOOK);
-                    item.setItemMeta(bookMeta);
-                } else {
-                    return;
-                }
-            }
-            p.openBook(item);
+            long time = ctx.args().getOr("time", new DecimalNumber(1000, 0)).toLong();
+            p.setPlayerTime(time, false);
         }
     }
 
@@ -46,18 +32,16 @@ public class PlayerOpenBook implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.ITEM, false, false, Component.text("Book item"), "item"),
+                DisplayValue.NUMBER, false, true, Component.text("Daylight ticks"), "time")
         };
     }
 
     @Override
-    public BarrelTag[] tags() {
-        return new BarrelTag[]{};
-    }
+    public BarrelTag[] tags() { return new BarrelTag[]{}; }
 
     @Override
     public String getId() {
-        return "open_book";
+        return "set_time";
     }
 
     @Override
@@ -67,33 +51,40 @@ public class PlayerOpenBook implements Action {
 
     @Override
     public String getSignName() {
-        return "OpenBook";
+        return "SetPlayerTime";
     }
 
     @Override
     public String getName() {
-        return "Open Book";
+        return "Set Player Time";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.PLAYER_ACTION_COMMUNICATION;
+        return PlayerActionItems.WORLD_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.WRITABLE_BOOK)
-                .setName(Component.text(this.getName()).color(NamedTextColor.YELLOW))
-                .setDescription(Component.text("Opens a written book"),
-                        Component.text("menu for a player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.CLOCK)
+            .setName(Component.text("Set Player Time").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Sets the time of day visible"),
+                Component.text("to a player."))
+            .addAdditionalInfo(Component.text("Day: <red>1000</red>"))
+            .addAdditionalInfo(Component.text("Noon: <red>6000</red>"))
+            .addAdditionalInfo(Component.text("Night: <red>13000</red>"))
+            .addAdditionalInfo(Component.text("Midnight: <red>18000</red>"))
+            .addAdditionalInfo(Component.text("If no value is provided, resets"),
+                Component.text("player's time."))
+            .setParameters(parameters())
+            .setTagAmount(tags().length)
+            .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-                .parameter("item", 13);
+            .parameter("time", 13);
     }
 }

@@ -30,8 +30,6 @@ public enum Actions implements Action {
     PLAYER_REMOVE_ITEMS(new PlayerRemoveItemsAction()),
     PLAYER_CLEAR_INV(new PlayerClearInventory()),
     PLAYER_SET_ITEM_COOLDOWN(new PlayerSetItemCooldown()),
-    PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
-    PLAYER_SHOW_ACTION_BAR_TEXT(new PlayerShowActionBarText()),
     PLAYER_GAMEMODE(new PlayerGamemodeAction()),
     PLAYER_TELEPORT(new PlayerTeleportAction()),
     PLAYER_LAUNCH(new PlayerLaunchAction()),
@@ -48,6 +46,12 @@ public enum Actions implements Action {
     IF_PLAYER_FLYING(new IfPlayerFlying()),
     IF_PLAYER_GLIDING(new IfPlayerGliding()),
 
+    //Player Communication
+    PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
+    PLAYER_SHOW_ACTION_BAR_TEXT(new PlayerShowActionBarText()),
+    PLAYER_OPEN_BOOK(new PlayerOpenBook()),
+    PLAYER_SHOW_DEMO_SCREEN(new PlayerShowDemoScreen()),
+
     // Player Statistics
     SET_PLAYER_ATTRIBUTE(new PlayerSetAttribute()),
     SET_PLAYER_HEALTH(PlayerStatEnum.SET_PLAYER_HEALTH.getInstance()),
@@ -61,9 +65,16 @@ public enum Actions implements Action {
 
     // Player Appearance
     SEND_ATTACK_ANIMATION(new PlayerSendAttackAnimation()),
+    SET_VISUAL_FIRE(new PlayerSetVisualFire()),
+    SET_BEE_STINGS_STUCK(new PlayerSetBeeStingsStuck()),
+    SET_ARROWS_STUCK(new PlayerSetArrowsStuck()),
 
-    // Player Inventory Menus
-    OPEN_BOOK(new PlayerOpenBook()),
+    // Player World
+    SET_COMPASS_TARGET(new PlayerSetCompassTarget()),
+    SET_VIEW_DISTANCE(new PlayerSetViewDistance()),
+    SET_SIMULATION_DISTANCE(new PlayerSetSimulationDistance()),
+    SET_PLAYER_WEATHER(new PlayerSetWeather()),
+    SET_PLAYER_TIME(new PlayerSetTime()),
 
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),

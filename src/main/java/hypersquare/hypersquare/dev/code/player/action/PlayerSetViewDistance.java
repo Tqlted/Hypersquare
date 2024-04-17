@@ -14,31 +14,17 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerOpenBook implements Action {
-
+public class PlayerSetViewDistance implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            ItemStack item = ctx.args().single("item");
-            if(item.getType() != Material.WRITTEN_BOOK) {
-                if(item.getType() == Material.WRITABLE_BOOK) {
-                    BookMeta bookMeta = (BookMeta) item.getItemMeta();
-                    bookMeta.setAuthor(p.getName());
-                    bookMeta.setTitle("Book");
-                    item.setType(Material.WRITTEN_BOOK);
-                    item.setItemMeta(bookMeta);
-                } else {
-                    return;
-                }
-            }
-            p.openBook(item);
+            int distance = ctx.args().getOr("distance", new DecimalNumber(10, 0)).toInt();
+            p.setViewDistance(Math.clamp(distance,2,32));
         }
     }
 
@@ -46,18 +32,16 @@ public class PlayerOpenBook implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.ITEM, false, false, Component.text("Book item"), "item"),
+                DisplayValue.NUMBER, false, true, Component.text("Distance in chunks (2-32)"), "distance")
         };
     }
 
     @Override
-    public BarrelTag[] tags() {
-        return new BarrelTag[]{};
-    }
+    public BarrelTag[] tags() { return new BarrelTag[]{}; }
 
     @Override
     public String getId() {
-        return "open_book";
+        return "set_view_distance";
     }
 
     @Override
@@ -67,33 +51,38 @@ public class PlayerOpenBook implements Action {
 
     @Override
     public String getSignName() {
-        return "OpenBook";
+        return "ViewDistance";
     }
 
     @Override
     public String getName() {
-        return "Open Book";
+        return "Set Player View Distance";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.PLAYER_ACTION_COMMUNICATION;
+        return PlayerActionItems.WORLD_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.WRITABLE_BOOK)
-                .setName(Component.text(this.getName()).color(NamedTextColor.YELLOW))
-                .setDescription(Component.text("Opens a written book"),
-                        Component.text("menu for a player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.SPYGLASS)
+            .setName(Component.text("Set View Distance").color(NamedTextColor.YELLOW))
+            .setDescription(Component.text("Sets the view distance"),
+                Component.text("limit for a player."))
+            .addAdditionalInfo(Component.text("The distance cannot exceed the"),
+                Component.text("client's render distance."))
+            .addAdditionalInfo(Component.text("If no value is provided, resets"),
+                Component.text("a player's render distance."))
+            .setParameters(parameters())
+            .setTagAmount(tags().length)
+            .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-                .parameter("item", 13);
+            .parameter("distance", 13);
     }
 }

@@ -255,6 +255,13 @@ public class Utilities {
         player.setSaturation(20);
         player.sendActionBar(Component.empty());
         player.sendTitle("","", 0, 0, 0);
+        player.setBeeStingersInBody(0);
+        player.setArrowsInBody(0);
+        player.setVisualFire(false);
+        player.setViewDistance(10);
+        player.setSimulationDistance(10);
+        player.setPlayerWeather(WeatherType.CLEAR);
+        player.setPlayerTime(1000, false);
         if (clearInventory) player.getInventory().clear();
         player.clearActivePotionEffects();
         player.closeInventory();

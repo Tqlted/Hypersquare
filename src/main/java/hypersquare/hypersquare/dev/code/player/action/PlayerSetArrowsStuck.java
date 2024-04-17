@@ -14,31 +14,17 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerOpenBook implements Action {
-
+public class PlayerSetArrowsStuck implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            ItemStack item = ctx.args().single("item");
-            if(item.getType() != Material.WRITTEN_BOOK) {
-                if(item.getType() == Material.WRITABLE_BOOK) {
-                    BookMeta bookMeta = (BookMeta) item.getItemMeta();
-                    bookMeta.setAuthor(p.getName());
-                    bookMeta.setTitle("Book");
-                    item.setType(Material.WRITTEN_BOOK);
-                    item.setItemMeta(bookMeta);
-                } else {
-                    return;
-                }
-            }
-            p.openBook(item);
+            DecimalNumber arrowCount = ctx.args().single("arrowCount");
+            p.setArrowsInBody(arrowCount.toInt());
         }
     }
 
@@ -46,18 +32,16 @@ public class PlayerOpenBook implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.ITEM, false, false, Component.text("Book item"), "item"),
+                DisplayValue.NUMBER, false, false, Component.text("Arrow Count"), "arrowCount")
         };
     }
 
     @Override
-    public BarrelTag[] tags() {
-        return new BarrelTag[]{};
-    }
+    public BarrelTag[] tags() { return new BarrelTag[]{}; }
 
     @Override
     public String getId() {
-        return "open_book";
+        return "set_arrows";
     }
 
     @Override
@@ -67,33 +51,37 @@ public class PlayerOpenBook implements Action {
 
     @Override
     public String getSignName() {
-        return "OpenBook";
+        return "SetArrowsStuck";
     }
 
     @Override
     public String getName() {
-        return "Open Book";
+        return "Set Player Arrows Stuck";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.PLAYER_ACTION_COMMUNICATION;
+        return PlayerActionItems.APPEARANCE_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.WRITABLE_BOOK)
-                .setName(Component.text(this.getName()).color(NamedTextColor.YELLOW))
-                .setDescription(Component.text("Opens a written book"),
-                        Component.text("menu for a player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.ARROW)
+            .setName(Component.text("Set Arrows Stuck").color(NamedTextColor.GOLD))
+            .setDescription(Component.text("Sets the amount of arrows"),
+                Component.text("sticking out of a player's"),
+                Component.text("character model."))
+            .addAdditionalInfo(Component.text("These arrows cannot be"),
+                Component.text("used or picked up."))
+            .setParameters(parameters())
+            .setTagAmount(tags().length)
+            .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-                .parameter("item", 13);
+            .parameter("arrowCount", 13);
     }
 }

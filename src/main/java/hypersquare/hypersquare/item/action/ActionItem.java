@@ -19,6 +19,7 @@ public class ActionItem {
 
     Component name;
     Material material;
+    ItemStack itemStack;
     Component[] description;
     BarrelParameter[] params;
     int tags;
@@ -28,6 +29,10 @@ public class ActionItem {
 
     public ActionItem setMaterial(Material material) {
         this.material = material;
+        return this;
+    }
+    public ActionItem setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
         return this;
     }
 
@@ -79,7 +84,12 @@ public class ActionItem {
     }
 
     public ItemStack build() {
-        ItemStack actionItem = new ItemStack(material);
+        ItemStack actionItem;
+        if(itemStack == null) {
+            actionItem = new ItemStack(material);
+        }  else {
+            actionItem = itemStack;
+        }
         ItemMeta meta = actionItem.getItemMeta();
         List<Component> lore = new ArrayList<>(List.of());
 
