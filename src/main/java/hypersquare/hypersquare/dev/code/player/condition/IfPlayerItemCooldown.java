@@ -17,7 +17,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class IfPlayerNoItemCooldown implements IfAction {
+public class IfPlayerItemCooldown implements IfAction {
     @Override
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
@@ -32,7 +32,7 @@ public class IfPlayerNoItemCooldown implements IfAction {
 
     @Override
     public String getId() {
-        return "no_item_cooldown";
+        return "item_cooldown";
     }
 
     @Override
@@ -42,12 +42,12 @@ public class IfPlayerNoItemCooldown implements IfAction {
 
     @Override
     public String getSignName() {
-        return "NoItemCooldown";
+        return "ItemCooldown";
     }
 
     @Override
     public String getName() {
-        return "Item Is Not On Cooldown";
+        return "Item Is On Cooldown";
     }
 
     @Override
@@ -59,9 +59,9 @@ public class IfPlayerNoItemCooldown implements IfAction {
     public ItemStack item() {
         return new ActionItem()
                 .setMaterial(Material.CLOCK)
-                .setName(Component.text("Item Is Not On Cooldown").color(NamedTextColor.BLUE))
-                .setDescription(Component.text("Checks if a player does not have a"),
-                        Component.text("cooldown applied to an item type."))
+                .setName(Component.text("Item Is On Cooldown").color(NamedTextColor.BLUE))
+                .setDescription(Component.text("Checks if a player has a cooldown"),
+                        Component.text("applied to an item type."))
                 .setParameters(parameters())
                 .build();
     }

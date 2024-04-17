@@ -41,7 +41,7 @@ public enum Actions implements Action {
     PLAYER_SET_ROTATION(new PlayerSetRotationAction()),
     PLAYER_FACE_LOCATION(new PlayerFaceLocationAction()),
     IF_PLAYER_HOLDING(new IfPlayerHolding()),
-    IF_PLAYER_NO_ITEM_COOLDOWN(new IfPlayerNoItemCooldown()),
+    IF_PLAYER_ITEM_COOLDOWN(new IfPlayerItemCooldown()),
     IF_PLAYER_GROUNDED(new IfPlayerGrounded()),
     IF_PLAYER_SNEAKING(new IfPlayerSneaking()),
     IF_PLAYER_SPRINTING(new IfPlayerSprinting()),
@@ -54,6 +54,9 @@ public enum Actions implements Action {
 
     // Player Appearance
     SEND_ATTACK_ANIMATION(new PlayerSendAttackAnimation()),
+
+    // Player Inventory Menus
+    OPEN_BOOK(new PlayerOpenBook()),
 
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),
