@@ -81,8 +81,8 @@ public class PlayerSendAttackAnimation implements Action {
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 1, data)
-            .tag("arm", 4);
+        return new BarrelMenu(this, 3, data)
+            .tag("arm", 13);
     }
 
     private enum AnimationArm {
