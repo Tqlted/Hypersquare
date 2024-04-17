@@ -15,6 +15,9 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
@@ -230,14 +233,37 @@ public class Utilities {
     }
 
     public static void resetPlayerStats(@NotNull Player player, boolean clearInventory) {
+        for (Attribute attribute : Attribute.values()) {
+            AttributeInstance attributeInstance = player.getAttribute(attribute);
+            if (attributeInstance != null) {
+                double defaultValue = attributeInstance.getDefaultValue();
+                attributeInstance.setBaseValue(defaultValue);
+                Collection<AttributeModifier> modifiers = attributeInstance.getModifiers();
+                for (AttributeModifier existingModifier : modifiers) {
+                    attributeInstance.removeModifier(existingModifier);
+                }
+            }
+        }
         player.setHealth(20);
         player.setHealthScale(20);
-        player.setTotalExperience(0);
+        player.setLevel(0);
+        player.setExp(0);
         player.setFreezeTicks(0);
+        player.setFireTicks(0);
+        player.setNoDamageTicks(0);
         player.setFoodLevel(20);
+        player.setSaturation(20);
+        player.sendActionBar(Component.empty());
+        player.sendTitle("","", 0, 0, 0);
+        player.setBeeStingersInBody(0);
+        player.setArrowsInBody(0);
+        player.setVisualFire(false);
+        player.setViewDistance(10);
+        player.setSimulationDistance(10);
+        player.setPlayerWeather(WeatherType.CLEAR);
+        player.setPlayerTime(1000, false);
         if (clearInventory) player.getInventory().clear();
         player.clearActivePotionEffects();
-        player.setSaturation(20);
         player.closeInventory();
         player.setAllowFlight(false);
         player.setFlying(false);
