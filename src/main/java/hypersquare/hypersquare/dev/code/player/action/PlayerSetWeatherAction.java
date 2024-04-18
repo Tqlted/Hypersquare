@@ -7,49 +7,47 @@ import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
-import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
-import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
+import org.bukkit.WeatherType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class PlayerSetCompassTarget implements Action {
-
-
-    @Override
-    public BarrelParameter[] parameters() {
-        return new BarrelParameter[]{
-            new BarrelParameter(DisplayValue.LOCATION, false, false, Component.text("New Target"), "location")
-        };
-    }
-
-    @Override
-    public BarrelTag[] tags() {
-        return new BarrelTag[]{};
-    }
-
+public class PlayerSetWeatherAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            List<Location> locations = ctx.args().allNonNull("location");
-            if (locations.isEmpty()) return;
-            p.setCompassTarget(locations.getFirst());
-
+            Weather weather = ctx.getTag("weather", Weather::valueOf);
+            if(weather == Weather.CLEAR) p.setPlayerWeather(WeatherType.CLEAR);
+            if(weather == Weather.DOWNFALL) p.setPlayerWeather(WeatherType.DOWNFALL);
         }
     }
 
     @Override
-    public String getId() {
-        return "set_compass_target";
+    public BarrelParameter[] parameters() {
+        return new BarrelParameter[]{};
     }
+
+    @Override
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{
+            new BarrelTag("weather", "Weather", Weather.DOWNFALL,
+                new BarrelTag.Option(Weather.CLEAR, "Clear", Material.BUCKET),
+                new BarrelTag.Option(Weather.DOWNFALL, "Downfall", Material.WATER_BUCKET)
+            )
+        };
+    }
+
+    @Override
+    public String getId() {
+        return "set_weather";
+    }
+
     @Override
     public String getCodeblockId() {
         return "player_action";
@@ -57,12 +55,12 @@ public class PlayerSetCompassTarget implements Action {
 
     @Override
     public String getSignName() {
-        return "SetCompass";
+        return "SetPlayerWeather";
     }
 
     @Override
     public String getName() {
-        return "Set Compass Target";
+        return "Set Player Weather";
     }
 
     @Override
@@ -73,17 +71,23 @@ public class PlayerSetCompassTarget implements Action {
     @Override
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.COMPASS)
-            .setName(Component.text("Set Compass Target").color(Colors.BLUE))
-            .setDescription(Component.text("Sets the location compasses"),
-                Component.text("point to for a player."))
+            .setMaterial(Material.WATER_BUCKET)
+            .setName(Component.text("Set Player Weather").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Sets the type of weather"),
+                Component.text("visible to a player."))
             .setParameters(parameters())
+            .setTagAmount(tags().length)
             .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .parameter("location", 13);
+            .tag("weather", 13);
+    }
+
+    private enum Weather {
+        CLEAR,
+        DOWNFALL
     }
 }

@@ -14,16 +14,12 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class PlayerSetMovementSpeed implements Action {
+public class PlayerSetMovementSpeedAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
@@ -31,7 +27,7 @@ public class PlayerSetMovementSpeed implements Action {
             float groundSpeed = Math.clamp(speed/500, 0, 1);
             float flightSpeed = Math.clamp(speed/1000, 0, 1);
 
-            PlayerSetMovementSpeed.SpeedTypes speedType = ctx.getTag("speed_type", PlayerSetMovementSpeed. SpeedTypes::valueOf);
+            PlayerSetMovementSpeedAction.SpeedTypes speedType = ctx.getTag("speed_type", PlayerSetMovementSpeedAction. SpeedTypes::valueOf);
                 if(speedType == SpeedTypes.GROUND) p.setWalkSpeed(groundSpeed);
                 if(speedType == SpeedTypes.FLIGHT) p.setFlySpeed(flightSpeed);
                 if(speedType == SpeedTypes.BOTH) {

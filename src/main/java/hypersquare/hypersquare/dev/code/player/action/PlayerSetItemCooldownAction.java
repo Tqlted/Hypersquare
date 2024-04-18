@@ -19,12 +19,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerSetSimulationDistance implements Action {
+public class PlayerSetItemCooldownAction implements Action {
+
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            int distance = ctx.args().getOr("distance", new DecimalNumber(10, 0)).toInt();
-            p.setSimulationDistance(Math.clamp(distance,2,32));
+            DecimalNumber cooldown = ctx.args().single("cooldown");
+            ItemStack item = ctx.args().single("item");
+            p.setCooldown(item.getType(), cooldown.toInt());
         }
     }
 
@@ -32,16 +34,20 @@ public class PlayerSetSimulationDistance implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.NUMBER, false, true, Component.text("Distance in chunks (2-32)"), "distance")
+                DisplayValue.ITEM, false, false, Component.text("Item type to affect"), "item"),
+            new BarrelParameter(
+                DisplayValue.NUMBER, false, false, Component.text("Cooldown in ticks"), "cooldown"),
         };
     }
 
     @Override
-    public BarrelTag[] tags() { return new BarrelTag[]{}; }
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
+    }
 
     @Override
     public String getId() {
-        return "set_simulation_distance";
+        return "set_item_cooldown";
     }
 
     @Override
@@ -51,38 +57,34 @@ public class PlayerSetSimulationDistance implements Action {
 
     @Override
     public String getSignName() {
-        return "SimulationDistance";
+        return "SetItemCooldown";
     }
 
     @Override
     public String getName() {
-        return "Set Player Simulation Distance";
+        return "Set Item Cooldown";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.WORLD_CATEGORY;
+        return PlayerActionItems.ITEM_MANAGEMENT_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.ENDER_PEARL)
-            .setName(Component.text("Set Simulation Distance").color(NamedTextColor.YELLOW))
-            .setDescription(Component.text("Sets the simulation distance"),
-                Component.text("limit for a player."))
-            .addAdditionalInfo(Component.text("The distance cannot exceed the"),
-                Component.text("client's simulation distance."))
-            .addAdditionalInfo(Component.text("If no value is provided, resets"),
-                Component.text("a player's simulation distance."))
-            .setParameters(parameters())
-            .setTagAmount(tags().length)
-            .build();
+                .setMaterial(Material.CLOCK)
+                .setName(Component.text(this.getName()).color(NamedTextColor.BLUE))
+                .setDescription(Component.text("Applies a cooldown visual effect"),
+                        Component.text("to an item type."))
+                .setParameters(parameters())
+                .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .parameter("distance", 13);
+                .parameter("item", 12)
+                .parameter("cooldown", 14);
     }
 }

@@ -4,11 +4,9 @@ import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
-import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
@@ -19,30 +17,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PlayerClearInventory implements Action {
-
+public class PlayerSendAttackAnimationAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            p.getInventory().clear();
+            AnimationArm arm = ctx.getTag("arm", AnimationArm::valueOf);
+            if(arm == AnimationArm.MAIN) p.swingMainHand();
+            if(arm == AnimationArm.OFF) p.swingOffHand();
         }
-    }
-
-    public ItemStack item() {
-        return new ActionItem()
-                .setMaterial(Material.CAULDRON)
-                .setName(Component.text(this.getName()).color(NamedTextColor.RED))
-                .setDescription(Component.text("Clears the inventory of the player."))
-                .setParameters(parameters())
-                .build();
-    }
-
-    @Override
-    public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 3, data);
     }
 
     @Override
@@ -52,11 +34,17 @@ public class PlayerClearInventory implements Action {
 
     @Override
     public BarrelTag[] tags() {
-        return new BarrelTag[]{};
+        return new BarrelTag[]{
+            new BarrelTag("arm", "Animation Arm", AnimationArm.MAIN,
+                new BarrelTag.Option(AnimationArm.MAIN, "Swing main arm", Material.DIAMOND_SWORD),
+                new BarrelTag.Option(AnimationArm.OFF, "Swing off arm", Material.SHIELD)
+            )
+        };
     }
 
+    @Override
     public String getId() {
-        return "clear_inv";
+        return "send_attack_animation";
     }
 
     @Override
@@ -64,17 +52,41 @@ public class PlayerClearInventory implements Action {
         return "player_action";
     }
 
+    @Override
     public String getSignName() {
-        return "ClearInv";
+        return "AttackAnimation";
     }
 
     @Override
     public String getName() {
-        return "Clear Inventory";
+        return "Send Player Attack Animation";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.ITEM_MANAGEMENT_CATEGORY;
+        return PlayerActionItems.APPEARANCE_CATEGORY;
+    }
+
+    @Override
+    public ItemStack item() {
+        return new ActionItem()
+            .setMaterial(Material.GOLDEN_SWORD)
+            .setName(Component.text("Send Player Attack Animation").color(NamedTextColor.YELLOW))
+            .setDescription(Component.text("Makes a player perform"),
+                Component.text("an attack animation."))
+            .setParameters(parameters())
+            .setTagAmount(tags().length)
+            .build();
+    }
+
+    @Override
+    public BarrelMenu actionMenu(CodeActionData data) {
+        return new BarrelMenu(this, 3, data)
+            .tag("arm", 13);
+    }
+
+    private enum AnimationArm {
+        MAIN,
+        OFF
     }
 }

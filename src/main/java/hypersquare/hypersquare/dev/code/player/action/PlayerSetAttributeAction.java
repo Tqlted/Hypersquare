@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerSetAttribute implements Action {
+public class PlayerSetAttributeAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         List<DecimalNumber> modifierDecimal = ctx.args().allNonNull("modifier");

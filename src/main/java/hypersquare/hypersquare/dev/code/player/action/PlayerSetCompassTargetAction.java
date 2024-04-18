@@ -4,7 +4,6 @@ import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
@@ -12,38 +11,45 @@ import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerSetViewDistance implements Action {
-    @Override
-    public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
-        for (Player p : targetSel.players()) {
-            int distance = ctx.args().getOr("distance", new DecimalNumber(10, 0)).toInt();
-            p.setViewDistance(Math.clamp(distance,2,32));
-        }
-    }
+import java.util.List;
+
+public class PlayerSetCompassTargetAction implements Action {
+
 
     @Override
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
-            new BarrelParameter(
-                DisplayValue.NUMBER, false, true, Component.text("Distance in chunks (2-32)"), "distance")
+            new BarrelParameter(DisplayValue.LOCATION, false, false, Component.text("New Target"), "location")
         };
     }
 
     @Override
-    public BarrelTag[] tags() { return new BarrelTag[]{}; }
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
+    }
+
+    @Override
+    public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
+        for (Player p : targetSel.players()) {
+            List<Location> locations = ctx.args().allNonNull("location");
+            if (locations.isEmpty()) return;
+            p.setCompassTarget(locations.getFirst());
+
+        }
+    }
 
     @Override
     public String getId() {
-        return "set_view_distance";
+        return "set_compass_target";
     }
-
     @Override
     public String getCodeblockId() {
         return "player_action";
@@ -51,12 +57,12 @@ public class PlayerSetViewDistance implements Action {
 
     @Override
     public String getSignName() {
-        return "ViewDistance";
+        return "SetCompass";
     }
 
     @Override
     public String getName() {
-        return "Set Player View Distance";
+        return "Set Compass Target";
     }
 
     @Override
@@ -67,22 +73,17 @@ public class PlayerSetViewDistance implements Action {
     @Override
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.SPYGLASS)
-            .setName(Component.text("Set View Distance").color(NamedTextColor.YELLOW))
-            .setDescription(Component.text("Sets the view distance"),
-                Component.text("limit for a player."))
-            .addAdditionalInfo(Component.text("The distance cannot exceed the"),
-                Component.text("client's render distance."))
-            .addAdditionalInfo(Component.text("If no value is provided, resets"),
-                Component.text("a player's render distance."))
+            .setMaterial(Material.COMPASS)
+            .setName(Component.text("Set Compass Target").color(Colors.BLUE))
+            .setDescription(Component.text("Sets the location compasses"),
+                Component.text("point to for a player."))
             .setParameters(parameters())
-            .setTagAmount(tags().length)
             .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .parameter("distance", 13);
+            .parameter("location", 13);
     }
 }

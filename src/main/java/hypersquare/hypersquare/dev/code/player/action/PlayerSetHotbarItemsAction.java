@@ -20,29 +20,29 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-// For player inventories! Not inventory menus.
-public class PlayerSetInventoryItems implements Action {
+public class PlayerSetHotbarItemsAction implements Action {
 
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         List<ItemStack> items = ctx.args().allNullable("items");
 
         if (items.isEmpty()) {
-            for (int i = 9; i < 36; i++) items.add(null);
+            for (int i = 0; i < 9; i++) items.add(null);
         }
 
         for (Player p : targetSel.players()) {
-            for (int i = 9; i < 36; i++) {
-                if (items.size() + 9 <= i) break;
+            // For each hotbar slot.
+            for (int i = 0; i < 9; i++) {
+                if (items.size() <= i) break;
 
-                ItemStack item = items.get(i - 9);
+                ItemStack item = items.get(i);
                 boolean notNull = item != null;
 
                 switch (ctx.getTag("replacestyle", ReplaceOption::valueOf)) {
                     case REPLACE_EVERYTHING -> {
                         p.getInventory().setItem(i, notNull ? item : new ItemStack(Material.AIR));
                     }
-                    case ONLY_ITEMS_REPLACE -> {
+                    case ONLY_ITEMS_REPLACE -> { // ONLY ITEMS REPLACE
                         if (notNull)
                             p.getInventory().setItem(i, item);
                     }
@@ -58,18 +58,18 @@ public class PlayerSetInventoryItems implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.ENDER_CHEST)
+            .setMaterial(Material.DISPENSER)
             .setName(Component.text(this.getName()).color(NamedTextColor.GOLD))
-            .setDescription(Component.text("Sets the inventory items of the player."))
+            .setDescription(Component.text("Sets the hotbar items of the player."))
             .setParameters(parameters())
             .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 5, data)
-            .parameterRange("items", 9, 35)
-            .tag("replacestyle", 44);
+        return new BarrelMenu(this, 3, data)
+            .parameterRange("items", 9, 17)
+            .tag("replacestyle", 26);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class PlayerSetInventoryItems implements Action {
     }
 
     public String getId() {
-        return "set_inventory_items";
+        return "set_hotbar_items";
     }
 
     @Override
@@ -101,12 +101,12 @@ public class PlayerSetInventoryItems implements Action {
     }
 
     public String getSignName() {
-        return "InvItems";
+        return "HotbarItems";
     }
 
     @Override
     public String getName() {
-        return "Set Inventory Items";
+        return "Set Hotbar Items";
     }
 
     @Override

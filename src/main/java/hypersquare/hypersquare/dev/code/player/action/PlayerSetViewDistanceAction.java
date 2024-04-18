@@ -19,12 +19,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerSetArrowsStuck implements Action {
+public class PlayerSetViewDistanceAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            DecimalNumber arrowCount = ctx.args().single("arrowCount");
-            p.setArrowsInBody(arrowCount.toInt());
+            int distance = ctx.args().getOr("distance", new DecimalNumber(10, 0)).toInt();
+            p.setViewDistance(Math.clamp(distance,2,32));
         }
     }
 
@@ -32,7 +32,7 @@ public class PlayerSetArrowsStuck implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.NUMBER, false, false, Component.text("Arrow Count"), "arrowCount")
+                DisplayValue.NUMBER, false, true, Component.text("Distance in chunks (2-32)"), "distance")
         };
     }
 
@@ -41,7 +41,7 @@ public class PlayerSetArrowsStuck implements Action {
 
     @Override
     public String getId() {
-        return "set_arrows";
+        return "set_view_distance";
     }
 
     @Override
@@ -51,29 +51,30 @@ public class PlayerSetArrowsStuck implements Action {
 
     @Override
     public String getSignName() {
-        return "SetArrowsStuck";
+        return "ViewDistance";
     }
 
     @Override
     public String getName() {
-        return "Set Player Arrows Stuck";
+        return "Set Player View Distance";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.APPEARANCE_CATEGORY;
+        return PlayerActionItems.WORLD_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.ARROW)
-            .setName(Component.text("Set Arrows Stuck").color(NamedTextColor.GOLD))
-            .setDescription(Component.text("Sets the amount of arrows"),
-                Component.text("sticking out of a player's"),
-                Component.text("character model."))
-            .addAdditionalInfo(Component.text("These arrows cannot be"),
-                Component.text("used or picked up."))
+            .setMaterial(Material.SPYGLASS)
+            .setName(Component.text("Set View Distance").color(NamedTextColor.YELLOW))
+            .setDescription(Component.text("Sets the view distance"),
+                Component.text("limit for a player."))
+            .addAdditionalInfo(Component.text("The distance cannot exceed the"),
+                Component.text("client's render distance."))
+            .addAdditionalInfo(Component.text("If no value is provided, resets"),
+                Component.text("a player's render distance."))
             .setParameters(parameters())
             .setTagAmount(tags().length)
             .build();
@@ -82,6 +83,6 @@ public class PlayerSetArrowsStuck implements Action {
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .parameter("arrowCount", 13);
+            .parameter("distance", 13);
     }
 }

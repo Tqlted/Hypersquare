@@ -23,37 +23,26 @@ public enum Actions implements Action {
     EMPTY(new EmptyAction()),
     PRINT_STACKTRACE(new PrintStackTraceAction()),
 
+    // Player Item
     PLAYER_GIVE_ITEMS(new PlayerGiveItemsAction()),
-    PLAYER_SET_HOTBAR_ITEMS(new PlayerSetHotbarItems()),
-    PLAYER_SET_INVENTORY_ITEMS(new PlayerSetInventoryItems()),
-    PLAYER_SET_INVENTORY_SLOT(new PlayerSetInventorySlot()),
+    PLAYER_SET_HOTBAR_ITEMS(new PlayerSetHotbarItemsAction()),
+    PLAYER_SET_INVENTORY_ITEMS(new PlayerSetInventoryItemsAction()),
+    PLAYER_SET_INVENTORY_SLOT(new PlayerSetInventorySlotAction()),
     PLAYER_REMOVE_ITEMS(new PlayerRemoveItemsAction()),
-    PLAYER_CLEAR_INV(new PlayerClearInventory()),
-    PLAYER_SET_ITEM_COOLDOWN(new PlayerSetItemCooldown()),
-    PLAYER_GAMEMODE(new PlayerGamemodeAction()),
-    PLAYER_TELEPORT(new PlayerTeleportAction()),
-    PLAYER_LAUNCH(new PlayerLaunchAction()),
-    PLAYER_SET_FLYING(new PlayerSetFlyingAction()),
-    PLAYER_SET_GLIDING(new PlayerSetGlidingAction()),
-    PLAYER_BOOST_ELYTRA(new PlayerBoostElytraAction()),
-    PLAYER_SET_ROTATION(new PlayerSetRotationAction()),
-    PLAYER_FACE_LOCATION(new PlayerFaceLocationAction()),
-    IF_PLAYER_HOLDING(new IfPlayerHolding()),
-    IF_PLAYER_ITEM_COOLDOWN(new IfPlayerItemCooldown()),
-    IF_PLAYER_GROUNDED(new IfPlayerGrounded()),
-    IF_PLAYER_SNEAKING(new IfPlayerSneaking()),
-    IF_PLAYER_SPRINTING(new IfPlayerSprinting()),
-    IF_PLAYER_FLYING(new IfPlayerFlying()),
-    IF_PLAYER_GLIDING(new IfPlayerGliding()),
+    PLAYER_CLEAR_INV(new PlayerClearInventoryAction()),
+    PLAYER_SET_ITEM_COOLDOWN(new PlayerSetItemCooldownAction()),
 
     //Player Communication
     PLAYER_SEND_MESSAGE(new PlayerSendMessageAction()),
-    PLAYER_SHOW_ACTION_BAR_TEXT(new PlayerShowActionBarText()),
-    PLAYER_OPEN_BOOK(new PlayerOpenBook()),
-    PLAYER_SHOW_DEMO_SCREEN(new PlayerShowDemoScreen()),
+    PLAYER_SHOW_ACTION_BAR_TEXT(new PlayerShowActionBarTextAction()),
+    PLAYER_OPEN_BOOK(new PlayerOpenBookAction()),
+    PLAYER_SHOW_DEMO_SCREEN(new PlayerShowDemoScreenAction()),
+
+    // Player Inventory Menus
+    PLAYER_CLOSE_INVENTORY(new PlayerCloseInventoryAction()),
 
     // Player Statistics
-    SET_PLAYER_ATTRIBUTE(new PlayerSetAttribute()),
+    SET_PLAYER_ATTRIBUTE(new PlayerSetAttributeAction()),
     SET_PLAYER_HEALTH(PlayerStatEnum.SET_PLAYER_HEALTH.getInstance()),
     SET_INVUL_TICKS(PlayerStatEnum.SET_PLAYER_INVUL_TICKS.getInstance()),
     SET_FALL_DISTANCE(PlayerStatEnum.SET_PLAYER_FALL_DISTANCE.getInstance()),
@@ -61,20 +50,46 @@ public enum Actions implements Action {
     SET_FREEZE_TICKS(PlayerStatEnum.SET_PLAYER_FREEZE_TICKS.getInstance()),
     SET_FIRE_TICKS(PlayerStatEnum.SET_PLAYER_FIRE_TICKS.getInstance()),
     SET_HOTBAR_SLOT(PlayerStatEnum.SET_PLAYER_HOTBAR_SLOT.getInstance()),
-    SET_MOVEMENT_SPEED(new PlayerSetMovementSpeed()),
+    SET_MOVEMENT_SPEED(new PlayerSetMovementSpeedAction()),
 
-    // Player Appearance
-    SEND_ATTACK_ANIMATION(new PlayerSendAttackAnimation()),
-    SET_VISUAL_FIRE(new PlayerSetVisualFire()),
-    SET_BEE_STINGS_STUCK(new PlayerSetBeeStingsStuck()),
-    SET_ARROWS_STUCK(new PlayerSetArrowsStuck()),
+
+    // Player Settings
+    PLAYER_GAMEMODE(new PlayerGamemodeAction()),
+
+    // Player Movement
+    PLAYER_TELEPORT(new PlayerTeleportAction()),
+    PLAYER_LAUNCH(new PlayerLaunchAction()),
+    PLAYER_SET_FLYING(new PlayerSetFlyingAction()),
+    PLAYER_SET_GLIDING(new PlayerSetGlidingAction()),
+    PLAYER_BOOST_ELYTRA(new PlayerBoostElytraAction()),
+    PLAYER_SET_ROTATION(new PlayerSetRotationAction()),
+    PLAYER_FACE_LOCATION(new PlayerFaceLocationAction()),
 
     // Player World
-    SET_COMPASS_TARGET(new PlayerSetCompassTarget()),
-    SET_VIEW_DISTANCE(new PlayerSetViewDistance()),
-    SET_SIMULATION_DISTANCE(new PlayerSetSimulationDistance()),
-    SET_PLAYER_WEATHER(new PlayerSetWeather()),
-    SET_PLAYER_TIME(new PlayerSetTime()),
+    SET_COMPASS_TARGET(new PlayerSetCompassTargetAction()),
+    SET_VIEW_DISTANCE(new PlayerSetViewDistanceAction()),
+    SET_SIMULATION_DISTANCE(new PlayerSetSimulationDistanceAction()),
+    SET_PLAYER_WEATHER(new PlayerSetWeatherAction()),
+    SET_PLAYER_TIME(new PlayerSetTimeAction()),
+
+    // Player Appearance
+    SEND_ATTACK_ANIMATION(new PlayerSendAttackAnimationAction()),
+    SET_VISUAL_FIRE(new PlayerSetVisualFireAction()),
+    SET_BEE_STINGS_STUCK(new PlayerSetBeeStingsStuckAction()),
+    SET_ARROWS_STUCK(new PlayerSetArrowsStuckAction()),
+
+
+    // If Player Item
+    IF_PLAYER_HOLDING(new IfPlayerHolding()),
+    IF_PLAYER_ITEM_COOLDOWN(new IfPlayerItemCooldown()),
+
+    // If Player Toggleable
+    IF_PLAYER_GROUNDED(new IfPlayerGrounded()),
+    IF_PLAYER_SNEAKING(new IfPlayerSneaking()),
+    IF_PLAYER_SPRINTING(new IfPlayerSprinting()),
+    IF_PLAYER_FLYING(new IfPlayerFlying()),
+    IF_PLAYER_GLIDING(new IfPlayerGliding()),
+
 
     ASSIGN_VARIABLE(new AssignVariableAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),

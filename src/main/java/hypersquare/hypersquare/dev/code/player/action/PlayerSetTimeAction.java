@@ -4,9 +4,11 @@ import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
+import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
@@ -17,34 +19,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerSendAttackAnimation implements Action {
+public class PlayerSetTimeAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            AnimationArm arm = ctx.getTag("arm", AnimationArm::valueOf);
-            if(arm == AnimationArm.MAIN) p.swingMainHand();
-            if(arm == AnimationArm.OFF) p.swingOffHand();
+            long time = ctx.args().getOr("time", new DecimalNumber(1000, 0)).toLong();
+            p.setPlayerTime(time, false);
         }
     }
 
     @Override
     public BarrelParameter[] parameters() {
-        return new BarrelParameter[]{};
-    }
-
-    @Override
-    public BarrelTag[] tags() {
-        return new BarrelTag[]{
-            new BarrelTag("arm", "Animation Arm", AnimationArm.MAIN,
-                new BarrelTag.Option(AnimationArm.MAIN, "Swing main arm", Material.DIAMOND_SWORD),
-                new BarrelTag.Option(AnimationArm.OFF, "Swing off arm", Material.SHIELD)
-            )
+        return new BarrelParameter[]{
+            new BarrelParameter(
+                DisplayValue.NUMBER, false, true, Component.text("Daylight ticks"), "time")
         };
     }
 
     @Override
+    public BarrelTag[] tags() { return new BarrelTag[]{}; }
+
+    @Override
     public String getId() {
-        return "send_attack_animation";
+        return "set_time";
     }
 
     @Override
@@ -54,26 +51,32 @@ public class PlayerSendAttackAnimation implements Action {
 
     @Override
     public String getSignName() {
-        return "AttackAnimation";
+        return "SetPlayerTime";
     }
 
     @Override
     public String getName() {
-        return "Send Player Attack Animation";
+        return "Set Player Time";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.APPEARANCE_CATEGORY;
+        return PlayerActionItems.WORLD_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.GOLDEN_SWORD)
-            .setName(Component.text("Send Player Attack Animation").color(NamedTextColor.YELLOW))
-            .setDescription(Component.text("Makes a player perform"),
-                Component.text("an attack animation."))
+            .setMaterial(Material.CLOCK)
+            .setName(Component.text("Set Player Time").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Sets the time of day visible"),
+                Component.text("to a player."))
+            .addAdditionalInfo(Component.text("Day: <red>1000</red>"))
+            .addAdditionalInfo(Component.text("Noon: <red>6000</red>"))
+            .addAdditionalInfo(Component.text("Night: <red>13000</red>"))
+            .addAdditionalInfo(Component.text("Midnight: <red>18000</red>"))
+            .addAdditionalInfo(Component.text("If no value is provided, resets"),
+                Component.text("player's time."))
             .setParameters(parameters())
             .setTagAmount(tags().length)
             .build();
@@ -82,11 +85,6 @@ public class PlayerSendAttackAnimation implements Action {
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .tag("arm", 13);
-    }
-
-    private enum AnimationArm {
-        MAIN,
-        OFF
+            .parameter("time", 13);
     }
 }
