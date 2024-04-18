@@ -17,15 +17,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class PlayerSetGlidingAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
             Gliding gliding = ctx.getTag("gliding", Gliding::valueOf);
-            boolean glide = gliding != Gliding.FALSE;
-            p.setGliding(glide);
+            p.setGliding(gliding == Gliding.TRUE);
         }
     }
 

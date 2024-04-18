@@ -36,7 +36,8 @@ public class PlayerShowActionBarTextAction implements Action {
             MergingOptions merging = ctx.getTag("text_merging", MergingOptions::valueOf);
 
             switch (merging) {
-                case SPACES -> p.sendActionBar(Component.join(JoinConfiguration.builder().separator(Component.text(" ")).build(), messages));
+                case SPACES ->
+                    p.sendActionBar(Component.join(JoinConfiguration.builder().separator(Component.text(" ")).build(), messages));
                 case NO_SPACES -> p.sendActionBar(Component.join(JoinConfiguration.noSeparators(), messages));
             }
         }
@@ -55,7 +56,7 @@ public class PlayerShowActionBarTextAction implements Action {
             new BarrelTag("text_merging", "Text Value Splitting", MergingOptions.SPACES,
                 new BarrelTag.Option(MergingOptions.NO_SPACES, "No spaces", Material.PAPER),
                 new BarrelTag.Option(MergingOptions.SPACES, "Add spaces", Material.MAP)
-                    )
+            )
         };
     }
 
@@ -87,20 +88,20 @@ public class PlayerShowActionBarTextAction implements Action {
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.SPRUCE_SIGN)
-                .setName(Component.text(this.getName()).color(NamedTextColor.GREEN))
-                .setDescription(Component.text("Displays text in a"),
-                        Component.text("player's action bar."))
-                .setParameters(parameters())
-                .setTagAmount(tags().length)
-                .build();
+            .setMaterial(Material.SPRUCE_SIGN)
+            .setName(Component.text(this.getName()).color(NamedTextColor.GREEN))
+            .setDescription(Component.text("Displays text in a"),
+                Component.text("player's action bar."))
+            .setParameters(parameters())
+            .setTagAmount(tags().length)
+            .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 4, data)
-                .parameter("messages", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)
-                .tag("text_merging", 35);
+            .parameter("messages", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)
+            .tag("text_merging", 35);
     }
 
     private enum MergingOptions {

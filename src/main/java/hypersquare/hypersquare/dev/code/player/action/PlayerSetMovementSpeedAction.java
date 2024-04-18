@@ -24,35 +24,27 @@ public class PlayerSetMovementSpeedAction implements Action {
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
             float speed = ctx.args().<DecimalNumber>allNonNull("speed").getFirst().toFloat();
-            float groundSpeed = Math.clamp(speed/500, 0, 1);
-            float flightSpeed = Math.clamp(speed/1000, 0, 1);
+            float groundSpeed = Math.clamp(speed / 500, 0, 1);
+            float flightSpeed = Math.clamp(speed / 1000, 0, 1);
 
-            PlayerSetMovementSpeedAction.SpeedTypes speedType = ctx.getTag("speed_type", PlayerSetMovementSpeedAction. SpeedTypes::valueOf);
-                if(speedType == SpeedTypes.GROUND) p.setWalkSpeed(groundSpeed);
-                if(speedType == SpeedTypes.FLIGHT) p.setFlySpeed(flightSpeed);
-                if(speedType == SpeedTypes.BOTH) {
-                    p.setWalkSpeed(groundSpeed);
-                    p.setFlySpeed(flightSpeed);
+            PlayerSetMovementSpeedAction.SpeedTypes speedType = ctx.getTag("speed_type", PlayerSetMovementSpeedAction.SpeedTypes::valueOf);
+            if (speedType == SpeedTypes.GROUND) p.setWalkSpeed(groundSpeed);
+            if (speedType == SpeedTypes.FLIGHT) p.setFlySpeed(flightSpeed);
+            if (speedType == SpeedTypes.BOTH) {
+                p.setWalkSpeed(groundSpeed);
+                p.setFlySpeed(flightSpeed);
             }
         }
     }
 
     @Override
     public BarrelParameter[] parameters() {
-        return new BarrelParameter[]{
-            new BarrelParameter(DisplayValue.NUMBER, false, false, Component.text("Movement speed percentage"), "speed")
-        };
+        return new BarrelParameter[]{new BarrelParameter(DisplayValue.NUMBER, false, false, Component.text("Movement speed percentage"), "speed")};
     }
 
     @Override
     public BarrelTag[] tags() {
-        return new BarrelTag[]{
-            new BarrelTag("speed_type", "Speed Type", SpeedTypes.GROUND,
-                new BarrelTag.Option(SpeedTypes.GROUND, "Ground speed", Material.IRON_BOOTS),
-                new BarrelTag.Option(SpeedTypes.FLIGHT, "Flight speed", Material.ELYTRA),
-                new BarrelTag.Option(SpeedTypes.BOTH, "Both", Material.SUGAR)
-            )
-        };
+        return new BarrelTag[]{new BarrelTag("speed_type", "Speed Type", SpeedTypes.GROUND, new BarrelTag.Option(SpeedTypes.GROUND, "Ground speed", Material.IRON_BOOTS), new BarrelTag.Option(SpeedTypes.FLIGHT, "Flight speed", Material.ELYTRA), new BarrelTag.Option(SpeedTypes.BOTH, "Both", Material.SUGAR))};
     }
 
     @Override
@@ -82,30 +74,15 @@ public class PlayerSetMovementSpeedAction implements Action {
 
     @Override
     public ItemStack item() {
-        return new ActionItem()
-            .setMaterial(Material.NETHERITE_BOOTS)
-            .setName(Component.text("Set Movement Speed").color(NamedTextColor.GOLD))
-            .setDescription(Component.text("Sets a player's walking"),
-                Component.text("and/or flight speed."))
-            .addAdditionalInfo(Component.text("Fly speed maxes at 1000%, whilst"),
-                Component.text("walk speed maxes at 500%."))
-            .addAdditionalInfo(Component.text("Values above or below the max"),
-                Component.text("or min will get clamped accordingly."))
-            .setParameters(parameters())
-            .setTagAmount(tags().length)
-            .build();
+        return new ActionItem().setMaterial(Material.NETHERITE_BOOTS).setName(Component.text("Set Movement Speed").color(NamedTextColor.GOLD)).setDescription(Component.text("Sets a player's walking"), Component.text("and/or flight speed.")).addAdditionalInfo(Component.text("Fly speed maxes at 1000%, whilst"), Component.text("walk speed maxes at 500%.")).addAdditionalInfo(Component.text("Values above or below the max"), Component.text("or min will get clamped accordingly.")).setParameters(parameters()).setTagAmount(tags().length).build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 3, data)
-            .parameter("speed", 13)
-            .tag("speed_type", 26);
+        return new BarrelMenu(this, 3, data).parameter("speed", 13).tag("speed_type", 26);
     }
 
     private enum SpeedTypes {
-        GROUND,
-        FLIGHT,
-        BOTH
+        GROUND, FLIGHT, BOTH
     }
 }

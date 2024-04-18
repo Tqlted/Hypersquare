@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-// For player inventories! Not inventory menus.
 public class PlayerSetInventoryItemsAction implements Action {
 
     @Override

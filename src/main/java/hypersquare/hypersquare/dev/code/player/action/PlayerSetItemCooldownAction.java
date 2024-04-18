@@ -73,18 +73,18 @@ public class PlayerSetItemCooldownAction implements Action {
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.CLOCK)
-                .setName(Component.text(this.getName()).color(NamedTextColor.BLUE))
-                .setDescription(Component.text("Applies a cooldown visual effect"),
-                        Component.text("to an item type."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.CLOCK)
+            .setName(Component.text(this.getName()).color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Applies a cooldown visual effect"),
+                Component.text("to an item type."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-                .parameter("item", 12)
-                .parameter("cooldown", 14);
+            .parameter("item", 12)
+            .parameter("cooldown", 14);
     }
 }

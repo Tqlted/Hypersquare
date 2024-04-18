@@ -24,7 +24,7 @@ public class PlayerSetViewDistanceAction implements Action {
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
             int distance = ctx.args().getOr("distance", new DecimalNumber(10, 0)).toInt();
-            p.setViewDistance(Math.clamp(distance,2,32));
+            p.setViewDistance(Math.clamp(distance, 2, 32));
         }
     }
 
@@ -32,12 +32,18 @@ public class PlayerSetViewDistanceAction implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.NUMBER, false, true, Component.text("Distance in chunks (2-32)"), "distance")
+                DisplayValue.NUMBER, false, false, Component.text("Distance in chunks (2-32)"), "distance"),
+            new BarrelParameter(
+                DisplayValue.OR, false, false, Component.empty(), ""),
+            new BarrelParameter(
+                DisplayValue.NONE, false, false, Component.text("(Resets view distance)"), "")
         };
     }
 
     @Override
-    public BarrelTag[] tags() { return new BarrelTag[]{}; }
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
+    }
 
     @Override
     public String getId() {
@@ -73,8 +79,6 @@ public class PlayerSetViewDistanceAction implements Action {
                 Component.text("limit for a player."))
             .addAdditionalInfo(Component.text("The distance cannot exceed the"),
                 Component.text("client's render distance."))
-            .addAdditionalInfo(Component.text("If no value is provided, resets"),
-                Component.text("a player's render distance."))
             .setParameters(parameters())
             .setTagAmount(tags().length)
             .build();

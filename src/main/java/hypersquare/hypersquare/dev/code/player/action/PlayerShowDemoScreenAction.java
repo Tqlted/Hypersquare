@@ -28,12 +28,12 @@ public class PlayerShowDemoScreenAction implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.NAME_TAG)
-                .setName(Component.text(this.getName()).color(NamedTextColor.YELLOW))
-                .setDescription(Component.text("Shows the demo screen to the"),
-                    Component.text("player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.NAME_TAG)
+            .setName(Component.text(this.getName()).color(NamedTextColor.YELLOW))
+            .setDescription(Component.text("Shows the demo screen to the"),
+                Component.text("player."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override

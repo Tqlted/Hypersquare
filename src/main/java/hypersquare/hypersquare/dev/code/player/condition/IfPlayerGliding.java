@@ -55,12 +55,12 @@ public class IfPlayerGliding implements IfAction {
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.ELYTRA)
-                .setName(Component.text("Is Gliding").color(NamedTextColor.BLUE))
-                .setDescription(Component.text("Checks if a player is"),
-                    Component.text("gliding with elytra."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.ELYTRA)
+            .setName(Component.text("Is Gliding").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Checks if a player is"),
+                Component.text("gliding with elytra."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override

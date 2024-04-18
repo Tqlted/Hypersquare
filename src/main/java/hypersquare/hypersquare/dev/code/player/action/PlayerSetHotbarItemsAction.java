@@ -31,7 +31,6 @@ public class PlayerSetHotbarItemsAction implements Action {
         }
 
         for (Player p : targetSel.players()) {
-            // For each hotbar slot.
             for (int i = 0; i < 9; i++) {
                 if (items.size() <= i) break;
 
@@ -42,7 +41,7 @@ public class PlayerSetHotbarItemsAction implements Action {
                     case REPLACE_EVERYTHING -> {
                         p.getInventory().setItem(i, notNull ? item : new ItemStack(Material.AIR));
                     }
-                    case ONLY_ITEMS_REPLACE -> { // ONLY ITEMS REPLACE
+                    case ONLY_ITEMS_REPLACE -> {
                         if (notNull)
                             p.getInventory().setItem(i, item);
                     }

@@ -37,7 +37,9 @@ public class PlayerSetArrowsStuckAction implements Action {
     }
 
     @Override
-    public BarrelTag[] tags() { return new BarrelTag[]{}; }
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
+    }
 
     @Override
     public String getId() {

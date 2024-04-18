@@ -42,7 +42,6 @@ public enum Actions implements Action {
     PLAYER_CLOSE_INVENTORY(new PlayerCloseInventoryAction()),
 
     // Player Statistics
-    SET_PLAYER_ATTRIBUTE(new PlayerSetAttributeAction()),
     SET_PLAYER_HEALTH(PlayerStatEnum.SET_PLAYER_HEALTH.getInstance()),
     SET_INVUL_TICKS(PlayerStatEnum.SET_PLAYER_INVUL_TICKS.getInstance()),
     SET_FALL_DISTANCE(PlayerStatEnum.SET_PLAYER_FALL_DISTANCE.getInstance()),
@@ -51,6 +50,7 @@ public enum Actions implements Action {
     SET_FIRE_TICKS(PlayerStatEnum.SET_PLAYER_FIRE_TICKS.getInstance()),
     SET_HOTBAR_SLOT(PlayerStatEnum.SET_PLAYER_HOTBAR_SLOT.getInstance()),
     SET_MOVEMENT_SPEED(new PlayerSetMovementSpeedAction()),
+    SET_PLAYER_ATTRIBUTE(new PlayerSetAttributeAction()),
 
 
     // Player Settings
@@ -97,6 +97,7 @@ public enum Actions implements Action {
     ;
 
     public final Action a;
+
     Actions(Action a) {
         this.a = a;
     }
@@ -105,14 +106,16 @@ public enum Actions implements Action {
         if (id == null || codeblockId == null || id.equals("empty")) return Actions.EMPTY;
 
         for (Actions action : values()) {
-            if (Objects.equals(action.getCodeblockId(), codeblockId) && Objects.equals(action.getId(), id)) return action;
+            if (Objects.equals(action.getCodeblockId(), codeblockId) && Objects.equals(action.getId(), id))
+                return action;
         }
         return null;
     }
 
     public static @Nullable Action getByData(CodeActionData data) {
         for (Action action : Actions.values()) {
-            if (Objects.equals(action.getId(), data.action) && Objects.equals(action.getCodeblockId(), data.codeblock)) return action;
+            if (Objects.equals(action.getId(), data.action) && Objects.equals(action.getCodeblockId(), data.codeblock))
+                return action;
         }
         return null;
     }

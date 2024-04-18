@@ -39,7 +39,9 @@ public class PlayerSetBeeStingsStuckAction implements Action {
     }
 
     @Override
-    public BarrelTag[] tags() { return new BarrelTag[]{}; }
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
+    }
 
     @Override
     public String getId() {

@@ -55,11 +55,11 @@ public class IfPlayerSneaking implements IfAction {
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.CHAINMAIL_LEGGINGS)
-                .setName(Component.text("Is Sneaking").color(NamedTextColor.BLUE))
-                .setDescription(Component.text("Checks if a player is sneaking."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.CHAINMAIL_LEGGINGS)
+            .setName(Component.text("Is Sneaking").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Checks if a player is sneaking."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override

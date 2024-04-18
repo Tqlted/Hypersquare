@@ -50,6 +50,7 @@ public class PlayerSetCompassTargetAction implements Action {
     public String getId() {
         return "set_compass_target";
     }
+
     @Override
     public String getCodeblockId() {
         return "player_action";

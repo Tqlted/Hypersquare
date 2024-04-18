@@ -23,8 +23,8 @@ public class PlayerSetWeatherAction implements Action {
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
             Weather weather = ctx.getTag("weather", Weather::valueOf);
-            if(weather == Weather.CLEAR) p.setPlayerWeather(WeatherType.CLEAR);
-            if(weather == Weather.DOWNFALL) p.setPlayerWeather(WeatherType.DOWNFALL);
+            if (weather == Weather.CLEAR) p.setPlayerWeather(WeatherType.CLEAR);
+            if (weather == Weather.DOWNFALL) p.setPlayerWeather(WeatherType.DOWNFALL);
         }
     }
 

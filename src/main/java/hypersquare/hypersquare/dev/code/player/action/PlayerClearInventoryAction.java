@@ -28,11 +28,11 @@ public class PlayerClearInventoryAction implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.CAULDRON)
-                .setName(Component.text(this.getName()).color(NamedTextColor.RED))
-                .setDescription(Component.text("Clears the inventory of the player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.CAULDRON)
+            .setName(Component.text(this.getName()).color(NamedTextColor.RED))
+            .setDescription(Component.text("Clears the inventory of the player."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override
