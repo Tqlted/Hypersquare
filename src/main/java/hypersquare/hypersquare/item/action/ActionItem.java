@@ -139,7 +139,7 @@ public class ActionItem {
             );
         }
 
-        if (params == null & tags == 0) lore.add(Component.text("None").color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
+        if ((params == null || params.length == 0) & tags == 0) lore.add(Component.text("None").color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
 
         // Additional Info
         if (!additionalInfo.isEmpty()) {

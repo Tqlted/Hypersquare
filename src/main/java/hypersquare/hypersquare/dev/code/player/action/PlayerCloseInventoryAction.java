@@ -67,7 +67,7 @@ public class PlayerCloseInventoryAction implements Action {
     @Override
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.FIREWORK_ROCKET)
+            .setMaterial(Material.OAK_DOOR)
             .setName(Component.text("Close Inventory").color(Colors.RED_LIGHT))
             .setDescription(Component.text("Closes a player's currently"), Component.text("open inventory menu."))
             .addAdditionalInfo(Component.text("This includes chat, game menu, etc."))
