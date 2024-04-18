@@ -4,11 +4,9 @@ import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
-import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
@@ -18,9 +16,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerClearInventory implements Action {
 
@@ -33,11 +28,11 @@ public class PlayerClearInventory implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.CAULDRON)
-                .setName(Component.text(this.getName()).color(NamedTextColor.RED))
-                .setDescription(Component.text("Clears the inventory of the player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.CAULDRON)
+            .setName(Component.text(this.getName()).color(NamedTextColor.RED))
+            .setDescription(Component.text("Clears the inventory of the player."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override

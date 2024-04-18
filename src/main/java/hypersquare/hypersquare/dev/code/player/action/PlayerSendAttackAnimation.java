@@ -22,8 +22,8 @@ public class PlayerSendAttackAnimation implements Action {
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
             AnimationArm arm = ctx.getTag("arm", AnimationArm::valueOf);
-            if(arm == AnimationArm.MAIN) p.swingMainHand();
-            if(arm == AnimationArm.OFF) p.swingOffHand();
+            if (arm == AnimationArm.MAIN) p.swingMainHand();
+            if (arm == AnimationArm.OFF) p.swingOffHand();
         }
     }
 
