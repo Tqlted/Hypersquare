@@ -82,6 +82,6 @@ public class PlayerGamemodeAction implements Action {
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .tag("gamemode", 26);
+            .tag("gamemode", 13);
     }
 }

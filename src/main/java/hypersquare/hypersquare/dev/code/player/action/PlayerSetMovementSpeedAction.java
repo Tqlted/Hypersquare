@@ -79,7 +79,7 @@ public class PlayerSetMovementSpeedAction implements Action {
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 3, data).parameter("speed", 13).tag("speed_type", 26);
+        return new BarrelMenu(this, 3, data).parameter("speed", 11).tag("speed_type", 14);
     }
 
     private enum SpeedTypes {

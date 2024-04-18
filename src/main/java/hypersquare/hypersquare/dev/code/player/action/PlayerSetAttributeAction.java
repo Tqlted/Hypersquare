@@ -141,9 +141,9 @@ public class PlayerSetAttributeAction implements Action {
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .parameter("modifier", 13)
-            .tag("attribute", 25)
-            .tag("operation", 26);
+            .parameter("modifier", 11)
+            .tag("attribute", 13)
+            .tag("operation", 15);
 
     }
 
