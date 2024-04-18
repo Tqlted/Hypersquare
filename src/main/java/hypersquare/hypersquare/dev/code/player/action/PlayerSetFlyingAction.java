@@ -69,7 +69,7 @@ public class PlayerSetFlyingAction implements Action {
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 1, data).tag("flying", 4);
+        return new BarrelMenu(this, 3, data).tag("flying", 4);
     }
 
     private enum Flying {

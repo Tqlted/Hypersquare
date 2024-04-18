@@ -79,7 +79,7 @@ public class PlayerSetGlidingAction implements Action {
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 1, data)
+        return new BarrelMenu(this, 3, data)
             .tag("gliding", 4);
     }
 
