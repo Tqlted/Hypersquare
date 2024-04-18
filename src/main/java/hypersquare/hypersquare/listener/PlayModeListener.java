@@ -6,9 +6,7 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.CodeExecutor;
 import hypersquare.hypersquare.util.PlotUtilities;
 import io.papermc.paper.event.player.AsyncChatEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -248,12 +246,14 @@ public class PlayModeListener implements Listener {
         if (cannotExecute(p)) return;
         PlotUtilities.getExecutor(p).trigger(Events.PLAYER_BREAK_ITEM_EVENT, event, new CodeSelection(p));
     }
+
     @EventHandler
     public void playerDamageItemEvent(@NotNull PlayerItemDamageEvent event) {
         Player p = event.getPlayer();
         if (cannotExecute(p)) return;
         PlotUtilities.getExecutor(p).trigger(Events.PLAYER_DAMAGE_ITEM_EVENT, event, new CodeSelection(p));
     }
+
     @EventHandler
     public void playerMendItemEvent(@NotNull PlayerItemMendEvent event) {
         Player p = event.getPlayer();
@@ -261,6 +261,7 @@ public class PlayModeListener implements Listener {
         PlotUtilities.getExecutor(p).trigger(Events.PLAYER_MEND_ITEM_EVENT, event, new CodeSelection(p));
 
     }
+
     @EventHandler
     public void playerRespawnEvent(@NotNull PlayerRespawnEvent event) {
         Player player = event.getPlayer();
@@ -268,14 +269,16 @@ public class PlayModeListener implements Listener {
         CodeExecutor executor = PlotUtilities.getExecutor(player);
         executor.trigger(Events.PLAYER_RESPAWN_EVENT, event, new CodeSelection(player));
     }
+
     @EventHandler
     public void entityTakeDamageEvent(@NotNull EntityDamageEvent event) {
-        if(event.getEntity() instanceof Player player) {
+        if (event.getEntity() instanceof Player player) {
             if (cannotExecute(player)) return;
             CodeExecutor executor = PlotUtilities.getExecutor(player);
             executor.trigger(Events.PLAYER_TAKE_DAMAGE_EVENT, event, new CodeSelection(player));
         }
     }
+
     @EventHandler
     public void entityDamageEntityEvent(@NotNull EntityDamageByEntityEvent event) {
         CodeExecutor executor;

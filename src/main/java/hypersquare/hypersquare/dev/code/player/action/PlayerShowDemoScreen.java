@@ -12,9 +12,7 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -30,12 +28,12 @@ public class PlayerShowDemoScreen implements Action {
 
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.NAME_TAG)
-                .setName(Component.text(this.getName()).color(NamedTextColor.YELLOW))
-                .setDescription(Component.text("Shows the demo screen to the"),
-                    Component.text("player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.NAME_TAG)
+            .setName(Component.text(this.getName()).color(NamedTextColor.YELLOW))
+            .setDescription(Component.text("Shows the demo screen to the"),
+                Component.text("player."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override

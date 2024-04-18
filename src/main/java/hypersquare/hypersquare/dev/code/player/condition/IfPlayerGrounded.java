@@ -55,12 +55,12 @@ public class IfPlayerGrounded implements IfAction {
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.OAK_TRAPDOOR)
-                .setName(Component.text("Is Grounded").color(NamedTextColor.BLUE))
-                .setDescription(Component.text("Checks if the player is"),
-                        Component.text("supported by a block."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.OAK_TRAPDOOR)
+            .setName(Component.text("Is Grounded").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Checks if the player is"),
+                Component.text("supported by a block."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override

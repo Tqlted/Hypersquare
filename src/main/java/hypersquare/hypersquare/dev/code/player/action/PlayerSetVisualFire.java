@@ -22,8 +22,7 @@ public class PlayerSetVisualFire implements Action {
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
             OnFire onFire = ctx.getTag("onFire", OnFire::valueOf);
-            if(onFire == OnFire.ON) p.setVisualFire(true);
-            if(onFire == OnFire.OFF) p.setVisualFire(false);
+            p.setVisualFire(onFire == OnFire.ON);
         }
     }
 

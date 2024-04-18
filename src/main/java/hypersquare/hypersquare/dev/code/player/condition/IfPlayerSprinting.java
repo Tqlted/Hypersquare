@@ -55,12 +55,12 @@ public class IfPlayerSprinting implements IfAction {
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.GOLDEN_BOOTS)
-                .setName(Component.text("Is Sprinting").color(NamedTextColor.BLUE))
-                .setDescription(Component.text("Checks if a player is sprinting"),
-                    Component.text("or using the sprint key to swim."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.GOLDEN_BOOTS)
+            .setName(Component.text("Is Sprinting").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Checks if a player is sprinting"),
+                Component.text("or using the sprint key to swim."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override
