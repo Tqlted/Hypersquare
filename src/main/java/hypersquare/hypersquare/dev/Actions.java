@@ -70,6 +70,7 @@ public enum Actions implements Action {
     SET_ARROWS_STUCK(new PlayerSetArrowsStuck()),
 
     // Player World
+    LAUNCH_PROJECTILE(new PlayerLaunchProjectile()),
     SET_COMPASS_TARGET(new PlayerSetCompassTarget()),
     SET_VIEW_DISTANCE(new PlayerSetViewDistance()),
     SET_SIMULATION_DISTANCE(new PlayerSetSimulationDistance()),
