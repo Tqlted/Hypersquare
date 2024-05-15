@@ -58,18 +58,18 @@ public class IfPlayerItemCooldown implements IfAction {
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.CLOCK)
-                .setName(Component.text("Item Is On Cooldown").color(NamedTextColor.BLUE))
-                .setDescription(Component.text("Checks if a player has a cooldown"),
-                        Component.text("applied to an item type."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.CLOCK)
+            .setName(Component.text("Item Is On Cooldown").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Checks if a player has a cooldown"),
+                Component.text("applied to an item type."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 4, data)
-                .parameter("item", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26);
+            .parameter("item", 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26);
     }
 
 
@@ -77,7 +77,7 @@ public class IfPlayerItemCooldown implements IfAction {
     public boolean check(Entity current, ExecutionContext ctx) {
         if (current instanceof Player p) {
             for (ItemStack item : ctx.args().<ItemStack>allNonNull("item")) {
-                if(!p.hasCooldown(item.getType())) return true;
+                if (!p.hasCooldown(item.getType())) return true;
             }
         }
         return false;

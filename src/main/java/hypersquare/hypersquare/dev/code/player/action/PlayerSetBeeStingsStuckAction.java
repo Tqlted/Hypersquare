@@ -14,17 +14,19 @@ import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerSetSimulationDistance implements Action {
+public class PlayerSetBeeStingsStuckAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            int distance = ctx.args().getOr("distance", new DecimalNumber(10, 0)).toInt();
-            p.setSimulationDistance(Math.clamp(distance,2,32));
+            DecimalNumber stingCount = ctx.args().single("stingCount");
+            p.setBeeStingersInBody(stingCount.toInt());
         }
     }
 
@@ -32,16 +34,18 @@ public class PlayerSetSimulationDistance implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.NUMBER, false, true, Component.text("Distance in chunks (2-32)"), "distance")
+                DisplayValue.NUMBER, false, false, Component.text("Sting Count"), "stingCount")
         };
     }
 
     @Override
-    public BarrelTag[] tags() { return new BarrelTag[]{}; }
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
+    }
 
     @Override
     public String getId() {
-        return "set_simulation_distance";
+        return "set_bee_stings";
     }
 
     @Override
@@ -51,30 +55,31 @@ public class PlayerSetSimulationDistance implements Action {
 
     @Override
     public String getSignName() {
-        return "SimulationDistance";
+        return "SetStingsStuck";
     }
 
     @Override
     public String getName() {
-        return "Set Player Simulation Distance";
+        return "Set Player Bee Stings Stuck";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.WORLD_CATEGORY;
+        return PlayerActionItems.APPEARANCE_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer("MHF_Bee"));
+        skull.setItemMeta(skullMeta);
         return new ActionItem()
-            .setMaterial(Material.ENDER_PEARL)
-            .setName(Component.text("Set Simulation Distance").color(NamedTextColor.YELLOW))
-            .setDescription(Component.text("Sets the simulation distance"),
-                Component.text("limit for a player."))
-            .addAdditionalInfo(Component.text("The distance cannot exceed the"),
-                Component.text("client's simulation distance."))
-            .addAdditionalInfo(Component.text("If no value is provided, resets"),
-                Component.text("a player's simulation distance."))
+            .setItemStack(skull)
+            .setName(Component.text("Set Bee Stings Stuck").color(NamedTextColor.GOLD))
+            .setDescription(Component.text("Sets the amount of bee stings"),
+                Component.text("sticking out of a player's"),
+                Component.text("character model."))
             .setParameters(parameters())
             .setTagAmount(tags().length)
             .build();
@@ -83,6 +88,6 @@ public class PlayerSetSimulationDistance implements Action {
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .parameter("distance", 13);
+            .parameter("stingCount", 13);
     }
 }

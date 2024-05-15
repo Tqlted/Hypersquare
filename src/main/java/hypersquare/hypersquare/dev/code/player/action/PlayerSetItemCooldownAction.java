@@ -4,9 +4,11 @@ import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
+import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
+import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
@@ -17,34 +19,35 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerSetVisualFire implements Action {
+public class PlayerSetItemCooldownAction implements Action {
+
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            OnFire onFire = ctx.getTag("onFire", OnFire::valueOf);
-            if(onFire == OnFire.ON) p.setVisualFire(true);
-            if(onFire == OnFire.OFF) p.setVisualFire(false);
+            DecimalNumber cooldown = ctx.args().single("cooldown");
+            ItemStack item = ctx.args().single("item");
+            p.setCooldown(item.getType(), cooldown.toInt());
         }
     }
 
     @Override
     public BarrelParameter[] parameters() {
-        return new BarrelParameter[]{};
-    }
-
-    @Override
-    public BarrelTag[] tags() {
-        return new BarrelTag[]{
-            new BarrelTag("onFire", "On Fire", OnFire.ON,
-                new BarrelTag.Option(OnFire.ON, "True", Material.LIME_DYE),
-                new BarrelTag.Option(OnFire.OFF, "False", Material.RED_DYE)
-            )
+        return new BarrelParameter[]{
+            new BarrelParameter(
+                DisplayValue.ITEM, false, false, Component.text("Item type to affect"), "item"),
+            new BarrelParameter(
+                DisplayValue.NUMBER, false, false, Component.text("Cooldown in ticks"), "cooldown"),
         };
     }
 
     @Override
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
+    }
+
+    @Override
     public String getId() {
-        return "set_visual_fire";
+        return "set_item_cooldown";
     }
 
     @Override
@@ -54,42 +57,34 @@ public class PlayerSetVisualFire implements Action {
 
     @Override
     public String getSignName() {
-        return "SetVisualFire";
+        return "SetItemCooldown";
     }
 
     @Override
     public String getName() {
-        return "Set Player Visual Fire";
+        return "Set Item Cooldown";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.APPEARANCE_CATEGORY;
+        return PlayerActionItems.ITEM_MANAGEMENT_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.CAMPFIRE)
-            .setName(Component.text("Set Visual Fire").color(NamedTextColor.GOLD))
-            .setDescription(Component.text("Sets whether a player"),
-                Component.text("should appear on fire."))
-            .addAdditionalInfo(Component.text("The affected player's fire"),
-                Component.text("ticks won't change and they"),
-                Component.text("won't take any damage."))
+            .setMaterial(Material.CLOCK)
+            .setName(Component.text(this.getName()).color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Applies a cooldown visual effect"),
+                Component.text("to an item type."))
             .setParameters(parameters())
-            .setTagAmount(tags().length)
             .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .tag("onFire", 13);
-    }
-
-    private enum OnFire {
-        ON,
-        OFF
+            .parameter("item", 12)
+            .parameter("cooldown", 14);
     }
 }

@@ -25,49 +25,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerSetAttribute implements Action {
+public class PlayerSetAttributeAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         List<DecimalNumber> modifierDecimal = ctx.args().allNonNull("modifier");
         double modifier = 0;
-        if(!modifierDecimal.isEmpty()) modifier = modifierDecimal.getFirst().toDouble();
+        if (!modifierDecimal.isEmpty()) modifier = modifierDecimal.getFirst().toDouble();
         Operations operations = ctx.getTag("operation", Operations::valueOf);
         Attributes attributes = ctx.getTag("attribute", Attributes::valueOf);
-        Attribute attribute = null;
-        switch (attributes) {
-            case ARMOR -> {
-                modifier = Math.clamp(modifier, 0, 30);
-                attribute = Attribute.GENERIC_ARMOR;
-            }
-            case ARMOR_TOUGHNESS -> {
-                modifier = Math.clamp(modifier, 0, 20);
-                attribute = Attribute.GENERIC_ARMOR_TOUGHNESS;
-            }
-            case ATTACK_DAMAGE -> {
-                modifier = Math.clamp(modifier, 0, 2048);
-                attribute = Attribute.GENERIC_ATTACK_DAMAGE;
-            }
-            case ATTACK_SPEED -> {
-                modifier = Math.clamp(modifier, 0, 1024);
-                attribute = Attribute.GENERIC_ATTACK_SPEED;
-            }
-            case KNOCKBACK_RESISTANCE -> {
-                modifier = Math.clamp(modifier, 0, 1);
-                attribute = Attribute.GENERIC_KNOCKBACK_RESISTANCE;
-            }
-            case LUCK -> {
-                modifier = Math.clamp(modifier, -1024, 1024);
-                attribute = Attribute.GENERIC_LUCK;
-            }
-            case MAX_ABSORPTION -> {
-                modifier = Math.clamp(modifier, 0, 2048);
-                attribute = Attribute.GENERIC_MAX_ABSORPTION;
-            }
-            case MAX_HEALTH -> {
-                modifier = Math.clamp(modifier, 1, 1024);
-                attribute = Attribute.GENERIC_MAX_HEALTH;
-            }
-        }
+
+        modifier = Math.clamp(modifier, attributes.min, attributes.max);
+        Attribute attribute = attributes.attribute;
+
         for (Player p : targetSel.players()) {
             if (!modifierDecimal.isEmpty()) {
                 switch (operations) {
@@ -99,6 +68,7 @@ public class PlayerSetAttribute implements Action {
             p.setHealth(Math.clamp(p.getHealth(), 1, p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
         }
     }
+
     @Override
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
@@ -171,21 +141,31 @@ public class PlayerSetAttribute implements Action {
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .parameter("modifier", 13)
-            .tag("attribute", 25)
-            .tag("operation", 26);
+            .parameter("modifier", 11)
+            .tag("attribute", 13)
+            .tag("operation", 15);
 
     }
 
     private enum Attributes {
-        ARMOR,
-        ARMOR_TOUGHNESS,
-        ATTACK_DAMAGE,
-        ATTACK_SPEED,
-        KNOCKBACK_RESISTANCE,
-        LUCK,
-        MAX_ABSORPTION,
-        MAX_HEALTH
+        ARMOR(Attribute.GENERIC_ARMOR, 0, 30),
+        ARMOR_TOUGHNESS(Attribute.GENERIC_ARMOR_TOUGHNESS, 0, 20),
+        ATTACK_DAMAGE(Attribute.GENERIC_ATTACK_DAMAGE, 0, 2048),
+        ATTACK_SPEED(Attribute.GENERIC_ATTACK_SPEED, 0, 1024),
+        KNOCKBACK_RESISTANCE(Attribute.GENERIC_KNOCKBACK_RESISTANCE, 0, 1),
+        LUCK(Attribute.GENERIC_LUCK, -1024, 1024),
+        MAX_ABSORPTION(Attribute.GENERIC_MAX_ABSORPTION, 0, 2048),
+        MAX_HEALTH(Attribute.GENERIC_MAX_HEALTH, 1, 1024);
+
+        private final Attribute attribute;
+        private final int min;
+        private final int max;
+
+        Attributes(Attribute literalAttribute, int min, int max) {
+            this.attribute = literalAttribute;
+            this.min = min;
+            this.max = max;
+        }
     }
 
     private enum Operations {

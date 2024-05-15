@@ -12,33 +12,20 @@ import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
+import hypersquare.hypersquare.util.color.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerOpenBook implements Action {
-
+public class PlayerSetTimeAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            ItemStack item = ctx.args().single("item");
-            if(item.getType() != Material.WRITTEN_BOOK) {
-                if(item.getType() == Material.WRITABLE_BOOK) {
-                    BookMeta bookMeta = (BookMeta) item.getItemMeta();
-                    bookMeta.setAuthor(p.getName());
-                    bookMeta.setTitle("Book");
-                    item.setType(Material.WRITTEN_BOOK);
-                    item.setItemMeta(bookMeta);
-                } else {
-                    return;
-                }
-            }
-            p.openBook(item);
+            long time = ctx.args().getOr("time", new DecimalNumber(1000, 0)).toLong();
+            p.setPlayerTime(time, false);
         }
     }
 
@@ -46,7 +33,11 @@ public class PlayerOpenBook implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.ITEM, false, false, Component.text("Book item"), "item"),
+                DisplayValue.NUMBER, false, true, Component.text("Daylight ticks"), "time"),
+            new BarrelParameter(
+                DisplayValue.OR, false, false, Component.empty(), ""),
+            new BarrelParameter(
+                DisplayValue.NONE, false, false, Component.text("(Resets player time)"), "")
         };
     }
 
@@ -57,7 +48,7 @@ public class PlayerOpenBook implements Action {
 
     @Override
     public String getId() {
-        return "open_book";
+        return "set_time";
     }
 
     @Override
@@ -67,33 +58,42 @@ public class PlayerOpenBook implements Action {
 
     @Override
     public String getSignName() {
-        return "OpenBook";
+        return "SetPlayerTime";
     }
 
     @Override
     public String getName() {
-        return "Open Book";
+        return "Set Player Time";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.PLAYER_ACTION_COMMUNICATION;
+        return PlayerActionItems.WORLD_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.WRITABLE_BOOK)
-                .setName(Component.text(this.getName()).color(NamedTextColor.YELLOW))
-                .setDescription(Component.text("Opens a written book"),
-                        Component.text("menu for a player."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.CLOCK)
+            .setName(Component.text("Set Player Time").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Sets the time of day visible"),
+                Component.text("to a player."))
+            .addAdditionalInfo(Component.text("Day: ")
+                .append(Component.text("1000").color(Colors.RED_LIGHT)))
+            .addAdditionalInfo(Component.text("Noon: ")
+                .append(Component.text("6000").color(Colors.RED_LIGHT)))
+            .addAdditionalInfo(Component.text("Night: ")
+                .append(Component.text("13000").color(Colors.RED_LIGHT)))
+            .addAdditionalInfo(Component.text("Midnight: ")
+                .append(Component.text("18000").color(Colors.RED_LIGHT)))
+            .setParameters(parameters())
+            .setTagAmount(tags().length)
+            .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-                .parameter("item", 13);
+            .parameter("time", 13);
     }
 }

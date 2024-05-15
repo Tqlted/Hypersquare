@@ -19,35 +19,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PlayerClearInventory implements Action {
-
+public class PlayerSetArrowsStuckAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            p.getInventory().clear();
+            DecimalNumber arrowCount = ctx.args().single("arrowCount");
+            p.setArrowsInBody(arrowCount.toInt());
         }
-    }
-
-    public ItemStack item() {
-        return new ActionItem()
-                .setMaterial(Material.CAULDRON)
-                .setName(Component.text(this.getName()).color(NamedTextColor.RED))
-                .setDescription(Component.text("Clears the inventory of the player."))
-                .setParameters(parameters())
-                .build();
-    }
-
-    @Override
-    public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 3, data);
     }
 
     @Override
     public BarrelParameter[] parameters() {
-        return new BarrelParameter[]{};
+        return new BarrelParameter[]{
+            new BarrelParameter(
+                DisplayValue.NUMBER, false, false, Component.text("Arrow Count"), "arrowCount")
+        };
     }
 
     @Override
@@ -55,8 +41,9 @@ public class PlayerClearInventory implements Action {
         return new BarrelTag[]{};
     }
 
+    @Override
     public String getId() {
-        return "clear_inv";
+        return "set_arrows";
     }
 
     @Override
@@ -64,17 +51,39 @@ public class PlayerClearInventory implements Action {
         return "player_action";
     }
 
+    @Override
     public String getSignName() {
-        return "ClearInv";
+        return "SetArrowsStuck";
     }
 
     @Override
     public String getName() {
-        return "Clear Inventory";
+        return "Set Player Arrows Stuck";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.ITEM_MANAGEMENT_CATEGORY;
+        return PlayerActionItems.APPEARANCE_CATEGORY;
+    }
+
+    @Override
+    public ItemStack item() {
+        return new ActionItem()
+            .setMaterial(Material.ARROW)
+            .setName(Component.text("Set Arrows Stuck").color(NamedTextColor.GOLD))
+            .setDescription(Component.text("Sets the amount of arrows"),
+                Component.text("sticking out of a player's"),
+                Component.text("character model."))
+            .addAdditionalInfo(Component.text("These arrows cannot be"),
+                Component.text("used or picked up."))
+            .setParameters(parameters())
+            .setTagAmount(tags().length)
+            .build();
+    }
+
+    @Override
+    public BarrelMenu actionMenu(CodeActionData data) {
+        return new BarrelMenu(this, 3, data)
+            .parameter("arrowCount", 13);
     }
 }
