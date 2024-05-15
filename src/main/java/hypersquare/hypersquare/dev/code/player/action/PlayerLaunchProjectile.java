@@ -36,10 +36,10 @@ public class PlayerLaunchProjectile implements Action {
         float projectileSpeed = ctx.args().getOr("speed", new DecimalNumber(1, 0)).toFloat();
         float projectileInaccuracy = ctx.args().getOr("inaccuracy", new DecimalNumber(0, 0)).toFloat();
         for (Player p : targetSel.players()) {
-            Location launchPoint = ctx.args().getOr("location", p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(1.05)));
-            launchPoint.setPitch((float) ((Math.random()*2-1) * projectileInaccuracy + launchPoint.getPitch()));
-            launchPoint.setYaw((float) ((Math.random()*2-1) * projectileInaccuracy + launchPoint.getYaw()));
+            Location launchPoint = ctx.args().getOr("location", p.getEyeLocation().add(p.getEyeLocation().getDirection()));
             Vector direction = launchPoint.getDirection();
+            direction.rotateAroundX((Math.random()*2-1) * projectileInaccuracy/5);
+            direction.rotateAroundZ((Math.random()*2-1) * projectileInaccuracy/5);
             Projectile projectile = p.getWorld().spawn(launchPoint, projectileType.get());
 
             if(projectileType == ProjectileType.CHARGED_WITHER_SKULL) ((WitherSkull) projectile).setCharged(true);
