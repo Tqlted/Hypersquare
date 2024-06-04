@@ -13,17 +13,18 @@ import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
+import org.bukkit.WeatherType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerSendAttackAnimation implements Action {
+public class PlayerSetWeatherAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            AnimationArm arm = ctx.getTag("arm", AnimationArm::valueOf);
-            if(arm == AnimationArm.MAIN) p.swingMainHand();
-            if(arm == AnimationArm.OFF) p.swingOffHand();
+            Weather weather = ctx.getTag("weather", Weather::valueOf);
+            if (weather == Weather.CLEAR) p.setPlayerWeather(WeatherType.CLEAR);
+            if (weather == Weather.DOWNFALL) p.setPlayerWeather(WeatherType.DOWNFALL);
         }
     }
 
@@ -35,16 +36,16 @@ public class PlayerSendAttackAnimation implements Action {
     @Override
     public BarrelTag[] tags() {
         return new BarrelTag[]{
-            new BarrelTag("arm", "Animation Arm", AnimationArm.MAIN,
-                new BarrelTag.Option(AnimationArm.MAIN, "Swing main arm", Material.DIAMOND_SWORD),
-                new BarrelTag.Option(AnimationArm.OFF, "Swing off arm", Material.SHIELD)
+            new BarrelTag("weather", "Weather", Weather.DOWNFALL,
+                new BarrelTag.Option(Weather.CLEAR, "Clear", Material.BUCKET),
+                new BarrelTag.Option(Weather.DOWNFALL, "Downfall", Material.WATER_BUCKET)
             )
         };
     }
 
     @Override
     public String getId() {
-        return "send_attack_animation";
+        return "set_weather";
     }
 
     @Override
@@ -54,26 +55,26 @@ public class PlayerSendAttackAnimation implements Action {
 
     @Override
     public String getSignName() {
-        return "AttackAnimation";
+        return "SetPlayerWeather";
     }
 
     @Override
     public String getName() {
-        return "Send Player Attack Animation";
+        return "Set Player Weather";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.APPEARANCE_CATEGORY;
+        return PlayerActionItems.WORLD_CATEGORY;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.GOLDEN_SWORD)
-            .setName(Component.text("Send Player Attack Animation").color(NamedTextColor.YELLOW))
-            .setDescription(Component.text("Makes a player perform"),
-                Component.text("an attack animation."))
+            .setMaterial(Material.WATER_BUCKET)
+            .setName(Component.text("Set Player Weather").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Sets the type of weather"),
+                Component.text("visible to a player."))
             .setParameters(parameters())
             .setTagAmount(tags().length)
             .build();
@@ -82,11 +83,11 @@ public class PlayerSendAttackAnimation implements Action {
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .tag("arm", 13);
+            .tag("weather", 13);
     }
 
-    private enum AnimationArm {
-        MAIN,
-        OFF
+    private enum Weather {
+        CLEAR,
+        DOWNFALL
     }
 }

@@ -12,42 +12,31 @@ import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
+import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PlayerClearInventory implements Action {
-
+public class PlayerSetBeeStingsStuckAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            p.getInventory().clear();
+            DecimalNumber stingCount = ctx.args().single("stingCount");
+            p.setBeeStingersInBody(stingCount.toInt());
         }
-    }
-
-    public ItemStack item() {
-        return new ActionItem()
-                .setMaterial(Material.CAULDRON)
-                .setName(Component.text(this.getName()).color(NamedTextColor.RED))
-                .setDescription(Component.text("Clears the inventory of the player."))
-                .setParameters(parameters())
-                .build();
-    }
-
-    @Override
-    public BarrelMenu actionMenu(CodeActionData data) {
-        return new BarrelMenu(this, 3, data);
     }
 
     @Override
     public BarrelParameter[] parameters() {
-        return new BarrelParameter[]{};
+        return new BarrelParameter[]{
+            new BarrelParameter(
+                DisplayValue.NUMBER, false, false, Component.text("Sting Count"), "stingCount")
+        };
     }
 
     @Override
@@ -55,8 +44,9 @@ public class PlayerClearInventory implements Action {
         return new BarrelTag[]{};
     }
 
+    @Override
     public String getId() {
-        return "clear_inv";
+        return "set_bee_stings";
     }
 
     @Override
@@ -64,17 +54,37 @@ public class PlayerClearInventory implements Action {
         return "player_action";
     }
 
+    @Override
     public String getSignName() {
-        return "ClearInv";
+        return "SetStingsStuck";
     }
 
     @Override
     public String getName() {
-        return "Clear Inventory";
+        return "Set Player Bee Stings Stuck";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.ITEM_MANAGEMENT_CATEGORY;
+        return PlayerActionItems.APPEARANCE_CATEGORY;
+    }
+
+    @Override
+    public ItemStack item() {
+        return new ActionItem()
+            .setItemStack(Utilities.getPlayerHead("MHF_Bee"))
+            .setName(Component.text("Set Bee Stings Stuck").color(NamedTextColor.GOLD))
+            .setDescription(Component.text("Sets the amount of bee stings"),
+                Component.text("sticking out of a player's"),
+                Component.text("character model."))
+            .setParameters(parameters())
+            .setTagAmount(tags().length)
+            .build();
+    }
+
+    @Override
+    public BarrelMenu actionMenu(CodeActionData data) {
+        return new BarrelMenu(this, 3, data)
+            .parameter("stingCount", 13);
     }
 }

@@ -64,7 +64,7 @@ public class Utilities {
     public static void sendMultiMiniMessage(CommandSender recipient, List<String> messages, boolean full) {
         int size = findLengthOfLongestString(messages);
         size = (int) (size * 1.5);
-        if (size > 50){
+        if (size > 50) {
             size = 50;
         }
         String before = "<#AAAAFF><strikethrough>" + " ".repeat((int) (size * 1.5)) + "<#AAAAFF>";
@@ -73,9 +73,11 @@ public class Utilities {
         recipient.sendMessage((full ? fullMM : cleanMM).deserialize(message));
     }
 
-    public static void sendMultiMiniMessage(CommandSender recipient, List<String> messages) {{
-        sendMultiMiniMessage(recipient, messages, false);
-    }}
+    public static void sendMultiMiniMessage(CommandSender recipient, List<String> messages) {
+        {
+            sendMultiMiniMessage(recipient, messages, false);
+        }
+    }
 
     public static ItemStack formatItem(@NotNull String lore, Material material, String name) {
         String[] parts = lore.split("%n");
@@ -109,12 +111,12 @@ public class Utilities {
     public static void sendInfo(@NotNull CommandSender sender, Component message, TextColor color) {
         sender.sendMessage(Component.text("»")
             .color(color)
-                .decoration(TextDecoration.BOLD, true)
-                .append(Component.text(" ")
-                        .color(NamedTextColor.GRAY)
-                        .decoration(TextDecoration.BOLD, false)
-                        .append(message)
-                )
+            .decoration(TextDecoration.BOLD, true)
+            .append(Component.text(" ")
+                .color(NamedTextColor.GRAY)
+                .decoration(TextDecoration.BOLD, false)
+                .append(message)
+            )
         );
     }
 
@@ -144,22 +146,22 @@ public class Utilities {
 
     public static boolean notWithinLocation(@NotNull Location targetLocation, @NotNull Location location1, Location location2) {
         return !targetLocation.getWorld().equals(location1.getWorld()) ||
-                !targetLocation.getWorld().equals(location2.getWorld()) ||
-                !(targetLocation.getX() >= Math.min(location1.getX(), location2.getX())) ||
-                !(targetLocation.getX() <= Math.max(location1.getX(), location2.getX())) ||
-                !(targetLocation.getY() >= Math.min(location1.getY(), location2.getY())) ||
-                !(targetLocation.getY() <= Math.max(location1.getY(), location2.getY())) ||
-                !(targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ())) ||
-                !(targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ()));
+            !targetLocation.getWorld().equals(location2.getWorld()) ||
+            !(targetLocation.getX() >= Math.min(location1.getX(), location2.getX())) ||
+            !(targetLocation.getX() <= Math.max(location1.getX(), location2.getX())) ||
+            !(targetLocation.getY() >= Math.min(location1.getY(), location2.getY())) ||
+            !(targetLocation.getY() <= Math.max(location1.getY(), location2.getY())) ||
+            !(targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ())) ||
+            !(targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ()));
     }
 
     public static boolean notWithinLocationIgnoreY(@NotNull Location targetLocation, @NotNull Location location1, Location location2) {
         return !targetLocation.getWorld().equals(location1.getWorld()) ||
-                !targetLocation.getWorld().equals(location2.getWorld()) ||
-                !(targetLocation.getX() >= Math.min(location1.getX(), location2.getX())) ||
-                !(targetLocation.getX() <= Math.max(location1.getX(), location2.getX())) ||
-                !(targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ())) ||
-                !(targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ()));
+            !targetLocation.getWorld().equals(location2.getWorld()) ||
+            !(targetLocation.getX() >= Math.min(location1.getX(), location2.getX())) ||
+            !(targetLocation.getX() <= Math.max(location1.getX(), location2.getX())) ||
+            !(targetLocation.getZ() >= Math.min(location1.getZ(), location2.getZ())) ||
+            !(targetLocation.getZ() <= Math.max(location1.getZ(), location2.getZ()));
     }
 
     public static double clamp(double value, double min, double max) {
@@ -179,7 +181,7 @@ public class Utilities {
     public static void savePersistentData(@NotNull World world, @NotNull SlimePlugin plugin) {
         SlimeWorld slimeWorld = plugin.getWorld(world.getName());
         CompoundTag chunkData = getChunkData(slimeWorld);
-        if(chunkData == null) return;
+        if (chunkData == null) return;
         CompoundMap compoundMap = NBTUtils.dataToCompoundMap(world.getPersistentDataContainer());
         chunkData.getValue().put("worldData", new CompoundTag("worldData", compoundMap));
         slimeWorld.getExtraData().getValue().put("worldData", chunkData);
@@ -233,8 +235,8 @@ public class Utilities {
 
     public static void sendUsageError(@NotNull CommandSender sender, String usage) {
         sender.sendMessage(Component.text("Usage: ")
-                .color(NamedTextColor.DARK_AQUA)
-                .append(Component.text(usage).color(NamedTextColor.GRAY))
+            .color(NamedTextColor.DARK_AQUA)
+            .append(Component.text(usage).color(NamedTextColor.GRAY))
         );
     }
 
@@ -260,7 +262,7 @@ public class Utilities {
         player.setFoodLevel(20);
         player.setSaturation(20);
         player.sendActionBar(Component.empty());
-        player.sendTitle("","", 0, 0, 0);
+        player.sendTitle("", "", 0, 0, 0);
         player.setBeeStingersInBody(0);
         player.setArrowsInBody(0);
         player.setVisualFire(false);

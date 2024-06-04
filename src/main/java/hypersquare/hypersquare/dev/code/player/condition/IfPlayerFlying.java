@@ -55,11 +55,11 @@ public class IfPlayerFlying implements IfAction {
     @Override
     public ItemStack item() {
         return new ActionItem()
-                .setMaterial(Material.FEATHER)
-                .setName(Component.text("Is Flying").color(NamedTextColor.BLUE))
-                .setDescription(Component.text("Checks if a player is flying."))
-                .setParameters(parameters())
-                .build();
+            .setMaterial(Material.FEATHER)
+            .setName(Component.text("Is Flying").color(NamedTextColor.BLUE))
+            .setDescription(Component.text("Checks if a player is flying."))
+            .setParameters(parameters())
+            .build();
     }
 
     @Override

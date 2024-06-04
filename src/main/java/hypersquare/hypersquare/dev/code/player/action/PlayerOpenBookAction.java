@@ -4,27 +4,42 @@ import hypersquare.hypersquare.dev.BarrelParameter;
 import hypersquare.hypersquare.dev.BarrelTag;
 import hypersquare.hypersquare.dev.action.Action;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
-import hypersquare.hypersquare.dev.value.type.DecimalNumber;
 import hypersquare.hypersquare.item.action.ActionItem;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
 import hypersquare.hypersquare.item.action.player.PlayerActionItems;
 import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
+import hypersquare.hypersquare.play.error.CodeErrorType;
+import hypersquare.hypersquare.play.error.HSException;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerSetViewDistance implements Action {
+import java.security.InvalidParameterException;
+
+public class PlayerOpenBookAction implements Action {
     @Override
     public void execute(@NotNull ExecutionContext ctx, @NotNull CodeSelection targetSel) {
         for (Player p : targetSel.players()) {
-            int distance = ctx.args().getOr("distance", new DecimalNumber(10, 0)).toInt();
-            p.setViewDistance(Math.clamp(distance,2,32));
+            ItemStack item = ctx.args().single("item");
+            if (item.getType() != Material.WRITTEN_BOOK) {
+                if (item.getType() == Material.WRITABLE_BOOK) {
+                    BookMeta bookMeta = (BookMeta) item.getItemMeta();
+                    bookMeta.setAuthor(p.getName());
+                    bookMeta.setTitle("Book");
+                    item.setType(Material.WRITTEN_BOOK);
+                    item.setItemMeta(bookMeta);
+                } else {
+                    throw new HSException(CodeErrorType.INVALID_PARAM, new InvalidParameterException("Item must be either a written book or a writable book"));
+                }
+            }
+            p.openBook(item);
         }
     }
 
@@ -32,16 +47,18 @@ public class PlayerSetViewDistance implements Action {
     public BarrelParameter[] parameters() {
         return new BarrelParameter[]{
             new BarrelParameter(
-                DisplayValue.NUMBER, false, true, Component.text("Distance in chunks (2-32)"), "distance")
+                DisplayValue.ITEM, false, false, Component.text("Book item"), "item"),
         };
     }
 
     @Override
-    public BarrelTag[] tags() { return new BarrelTag[]{}; }
+    public BarrelTag[] tags() {
+        return new BarrelTag[]{};
+    }
 
     @Override
     public String getId() {
-        return "set_view_distance";
+        return "open_book";
     }
 
     @Override
@@ -51,38 +68,33 @@ public class PlayerSetViewDistance implements Action {
 
     @Override
     public String getSignName() {
-        return "ViewDistance";
+        return "OpenBook";
     }
 
     @Override
     public String getName() {
-        return "Set Player View Distance";
+        return "Open Book";
     }
 
     @Override
     public ActionMenuItem getCategory() {
-        return PlayerActionItems.WORLD_CATEGORY;
+        return PlayerActionItems.PLAYER_ACTION_COMMUNICATION;
     }
 
     @Override
     public ItemStack item() {
         return new ActionItem()
-            .setMaterial(Material.SPYGLASS)
-            .setName(Component.text("Set View Distance").color(NamedTextColor.YELLOW))
-            .setDescription(Component.text("Sets the view distance"),
-                Component.text("limit for a player."))
-            .addAdditionalInfo(Component.text("The distance cannot exceed the"),
-                Component.text("client's render distance."))
-            .addAdditionalInfo(Component.text("If no value is provided, resets"),
-                Component.text("a player's render distance."))
+            .setMaterial(Material.WRITABLE_BOOK)
+            .setName(Component.text(this.getName()).color(NamedTextColor.YELLOW))
+            .setDescription(Component.text("Opens a written book"),
+                Component.text("menu for a player."))
             .setParameters(parameters())
-            .setTagAmount(tags().length)
             .build();
     }
 
     @Override
     public BarrelMenu actionMenu(CodeActionData data) {
         return new BarrelMenu(this, 3, data)
-            .parameter("distance", 13);
+            .parameter("item", 13);
     }
 }
