@@ -12,6 +12,7 @@ import hypersquare.hypersquare.item.value.DisplayValue;
 import hypersquare.hypersquare.menu.barrel.BarrelMenu;
 import hypersquare.hypersquare.play.CodeSelection;
 import hypersquare.hypersquare.play.execution.ExecutionContext;
+import hypersquare.hypersquare.util.Utilities;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -68,12 +69,8 @@ public class PlayerSetBeeStingsStuck implements Action {
 
     @Override
     public ItemStack item() {
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer("MHF_Bee"));
-        skull.setItemMeta(skullMeta);
         return new ActionItem()
-            .setItemStack(skull)
+            .setItemStack(Utilities.getPlayerHead("MHF_Bee"))
             .setName(Component.text("Set Bee Stings Stuck").color(NamedTextColor.GOLD))
             .setDescription(Component.text("Sets the amount of bee stings"),
                 Component.text("sticking out of a player's"),

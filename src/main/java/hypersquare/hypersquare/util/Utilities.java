@@ -5,6 +5,8 @@ import com.flowpowered.nbt.CompoundTag;
 import com.google.gson.JsonParser;
 import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import hypersquare.hypersquare.HSKeys;
 import hypersquare.hypersquare.Hypersquare;
 import hypersquare.hypersquare.plot.PlotDatabase;
@@ -24,10 +26,14 @@ import org.bukkit.block.sign.Side;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -293,4 +299,32 @@ public class Utilities {
     public static @NotNull String LocationToString(@NotNull Location location) {
         return location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ();
     }
+
+    public static ItemStack getPlayerHead(String name) {
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(name));
+        skull.setItemMeta(skullMeta);
+        return skull;
+    }
+
+    public static ItemStack getCustomHead(String texture) {
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+
+        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        profile.getProperties().put("textures", new Property("textures", texture));
+
+        try {
+            Field profileField = skullMeta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(skullMeta, profile);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        skull.setItemMeta(skullMeta);
+        return skull;
+    }
+
 }

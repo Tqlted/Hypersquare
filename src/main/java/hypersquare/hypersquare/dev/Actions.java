@@ -6,7 +6,7 @@ import hypersquare.hypersquare.dev.code.control.WaitAction;
 import hypersquare.hypersquare.dev.code.dev.PrintStackTraceAction;
 import hypersquare.hypersquare.dev.code.player.action.*;
 import hypersquare.hypersquare.dev.code.player.condition.*;
-import hypersquare.hypersquare.dev.code.var.action.AssignVariableAction;
+import hypersquare.hypersquare.dev.code.var.action.*;
 import hypersquare.hypersquare.dev.code.var.repeat.RepeatMultiple;
 import hypersquare.hypersquare.dev.codefile.data.CodeActionData;
 import hypersquare.hypersquare.item.action.ActionMenuItem;
@@ -78,6 +78,12 @@ public enum Actions implements Action {
     SET_PLAYER_TIME(new PlayerSetTime()),
 
     ASSIGN_VARIABLE(new AssignVariableAction()),
+    ADD_NUMBERS(new AddNumbersAction()),
+    SUBSTRACT_NUMBERS(new SubstractNumbersAction()),
+    MULTIPLY_NUMBERS(new MultiplyNumbersAction()),
+    DIVIDE_NUMBERS(new DivideNumbersAction()),
+    REMAINDER(new RemainderAction()),
+    RANDOM_NUMBER(new RandomNumberAction()),
     REPEAT_MULTIPLE(new RepeatMultiple()),
     CONTROL_WAIT(new WaitAction()),
     ;
